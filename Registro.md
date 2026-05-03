@@ -79,6 +79,7 @@ Costruzione/concatenazione di stringhe mediante `asprintf`
 
 
 
+---
 
 ## Definizione di struct: liste e alberi binari di ricerca (02struct)
 
@@ -146,6 +147,8 @@ Funzionamento interno di strtok(). Varabili statiche (esempio `statiche.c`)
 Makefile: target di default, meccanismo di risoluzione dei prerequisiti, regole implicite
 
 
+---
+
 
 ## Assembler ARM (03assembler)
 
@@ -177,6 +180,7 @@ Operazioni bitwise in C: `&`, `|`, `^`, `~`, `<<`, `>>`.
 Uso di variabili intere come array di bit. Esempi in `bitops.c` (non commentati a lezione).
 
 
+---
 
 ## Java (04ava)
 
@@ -221,6 +225,8 @@ Esercitazione su lettura/scrittura di file e uso di collezioni e mappe in Java.
 Prova in itinere sul contenuto delle lezioni 10-21
 
 
+
+---
 
 
 ## Uso di Python per interagire con il file system (05python)
@@ -295,6 +301,7 @@ utilizzo della classe `Miofile` per memorizzare le informazioni relative a un si
 Parametri posizionali e keyword. Uso di `*` e `**` per funzioni con numero arbitrario di parametri.
 
 
+---
 
 
 ## Introduzione ai thread in C (06threads)
@@ -348,7 +355,7 @@ Esempio di sorting parallelo: `threadSort.c` e `pmergesort.c`.
 Paradigma produttori-consumatori con produttori e consumatori multipli: `multip_primi_files.c`
 
 
-
+---
 
 
 ## Condition Variables e uso di file binari(08condVars)
@@ -403,6 +410,7 @@ Lettura di file binari con `fread()`; richiamo uso di `fseek` e `ftell` per dete
 
 
 
+---
 
 ## Introduzione ai processi (08processi)
 
@@ -456,9 +464,10 @@ Esempio utilizzo shared memory: `sommaprimi.c` e `sommaprimi_aux.c`.
 Esempio schema produttori consumatori tra processi, sorgenti `shm_prod.c` e `shm_cons.c`.
 
 
+---
 
 
-## 09 Segnali e varibili atomic (09segnali)
+## Segnali e variabili atomic (09segnali)
 
 ----
 
@@ -498,8 +507,7 @@ Confronto fra spinlock, mutex e variabili atomiche: `spinlock.c`.
 Uso di `atomic_compare_exchange_weak` per la realizzazione di uno stack lock-free; confronto fra stack lock-free e mutex: `stack.c`.
 
 
-
-----
+---
 
 
 ## Introduzione ai thread in Python (10pythreads)
@@ -527,8 +535,8 @@ Uso di `ThreadPoolExecutor` e `ProcessPoolExecutor`, i metodi [`map` e `submit`]
 **Lezione 45** (28/4/26)
 
 
+Altri esempi di Thread Pool: `esempiPool.py`.
 Mutex in Python (classe Lock), esempio: `sommaprimi.py`. 
-Altri esempi di Thread Pool: `esempiPool.py`
 [semafori e condition variables in python](https://superfastpython.com/threading-in-python/):
 `somma_primi_files.py` e `rw.py`.
 Ripasso del programma con esempi di domande della prova orale. 
@@ -539,5 +547,20 @@ Ripasso del programma con esempi di domande della prova orale.
 
 **Lezione 46** (30/4/26)
 
-Prova in itinere sul contenuto delle lezioni da 29 a 43.
+Prova in itinere sul contenuto delle lezioni da 29 a 43 (testo su moodle).
+
+
+----
+
+**Lezione 47** (5/5/26)
+
+Discussione del progetto finale. 
+
+
+----
+
+**Lezione 48** (7/5/26)
+
+Prova di recupero riservata agli studenti che hanno superato 2 prove in itinere su 4. 
+
 

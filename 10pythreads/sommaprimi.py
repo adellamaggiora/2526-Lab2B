@@ -17,13 +17,12 @@ class Somma:
     self.somma = 0
     self.lock = threading.Lock() # questo è l'analogo di un mutex del C
 
-
 # calcola la somma dei primi in [a,b) 
 def tbody(a,b,somma):
   logging.debug(f"Inizia esecuzione del thread che parte da {a} e arriva a {b}")
   lis = elenco_primi(a, b)
   for p in lis:
-    # with somma.lock:          # equivalente a mutex_lock
+    with somma.lock:          # equivalente a mutex_lock
       tmp = somma.somma + p
       time.sleep(0.001)       # questa interruzione può causare una race condition       
       somma.somma = tmp       # mutex_unlock all'uscita dal thread 
