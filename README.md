@@ -10,7 +10,7 @@ Questo repository contiene gli esempi di codice fatti a lezione e il registro de
 
 ### Guida alla compilazione
 
-```gcc -g -Wall -O -std=11 -o <output-file> <input-file.c>```
+```gcc -g -Wall -O -std=c11 -o <output-file> <input-file.c>```
 
 - -g -> includere info utili per il debugging
 - -Wall -> warning su semantica dinamica
