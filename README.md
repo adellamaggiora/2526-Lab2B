@@ -17,4 +17,5 @@ Questo repository contiene gli esempi di codice fatti a lezione e il registro de
 - -O -> ottimizzazione 
 - -std=c11 -> versione del linguaggio C utilizzata
 - -o -> output
+- -g -> sostituisce il flag ```-o``` e si usa per il debug
 - input-file -> contiene la funzione main()

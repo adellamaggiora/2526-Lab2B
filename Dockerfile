@@ -4,10 +4,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Aggiornamento e installazione pacchetti
 RUN apt-get update && apt-get install -y \
-    gcc \
-    gcc-doc \
-    make \
-    make-doc \
+    gcc gcc-doc \
+    make make-doc \
     geany \
     valgrind \
     gdb \
@@ -16,7 +14,8 @@ RUN apt-get update && apt-get install -y \
     man-db \
     vim \
     nano \
-    && apt-get clean
+    python3-pip \
+    && pip3 install --break-system-packages gdbgui
 
 # Cartella di lavoro
 WORKDIR /workspace
