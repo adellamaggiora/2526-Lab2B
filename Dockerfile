@@ -2,7 +2,6 @@ FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Aggiornamento e installazione pacchetti
 RUN apt-get update && apt-get install -y \
     gcc gcc-doc \
     make make-doc \
@@ -15,10 +14,12 @@ RUN apt-get update && apt-get install -y \
     vim \
     nano \
     python3-pip \
-    && pip3 install --break-system-packages gdbgui
+    && pip3 install --break-system-packages \
+        gdbgui \
+        gevent \
+        gevent-websocket \
+    && pip3 uninstall --break-system-packages -y eventlet
 
-# Cartella di lavoro
 WORKDIR /workspace
 
-# Shell di default
 CMD ["/bin/bash"]
