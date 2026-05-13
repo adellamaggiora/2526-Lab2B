@@ -33,6 +33,11 @@ int main(int argc, char *argv[]) {
   size_t len = 0;
   ssize_t read;
 
+  // getline legge una riga dal file e restituisce il numero di caratteri letti.
+  // Se arriva a fine file oppure c'è un errore, restituisce -1.
+  // Inoltre può modificare line e len:
+  // - line può essere allocata o riallocata automaticamente
+  // - len viene aggiornato con la dimensione del buffer disponibile
   while ((read = getline(&line, &len, f)) != -1) {
     printf("%zd\n", read);
     printf("%s", line);
