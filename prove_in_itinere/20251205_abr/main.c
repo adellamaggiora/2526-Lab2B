@@ -37,6 +37,7 @@ int main(int argc, char *argv[]) {
     printf("%zd\n", read);
     printf("%s", line);
   }
+   printf("%zd\n", read);
 
   free(line);
   fclose(f);
