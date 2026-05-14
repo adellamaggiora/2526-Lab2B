@@ -50,12 +50,7 @@ gcc -g -Wall -Wextra -std=c11 -o charstr charstr.c
 Per compilare un programma in modo adatto al debugging:
 
 ```bash
-gcc -g -Wall -Wextra -std=c11 -o <output-file> <input-file>.c
-```
-
-Esempio:
-```bash
-gcc -g -Wall -Wextra -std=c11 -o charstr charstr.c
+gcc -g -Wall -Wextra -std=gnu11 -o <output-file> <input-file>.c
 ```
 
 Poi si può avviare il debugger da terminale:

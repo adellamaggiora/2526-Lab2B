@@ -3,47 +3,84 @@
 #include <stdlib.h>   // conversioni stringa exit() etc ...
 #include <string.h>   // funzioni per stringhe
 #include <errno.h>    // richiesto per usare errno dentro termina()
+#include "nodo.h"
 
+// inserimento dei nodi in un ABR secondo il seguente ordinamento:
 
-void termina(const char *messaggio) {
-  if(errno==0) 
-     fprintf(stderr,"%s\n",messaggio);
-  else 
-    perror(messaggio);
-  exit(1);
+// ordinamento nodi secondi il campo chiave
+// chiave uguale -> ordinamento secondo il campo linea
+// chiave e linea uguali -> nodi uguali
+
+/* algoritmo */
+
+// 1. leggere dal file
+// 2. forall linea -> crea_nodo
+// 3. inserimento (log n?) ordinato (strcmp) in ABR (rispettando le prop ABR)
+// 4. visita in-order e inserire nel file output_stampa.txt
+// 5. free e controllo con valgrind su memoria
+
+// funzione che verifica se esiste il file
+void verifica_file(FILE *file) {
+  if (file == NULL) {
+    printf("Errore apertura file");
+    exit(1);
+  }
 }
 
 
+// line in input: 'prima linea'
+// output atteso: <linea> <prima linea>
+char **tokenizza_stringa(char *line) {
+  char *separator = " ";
+  int token_index = 1;
+
+  char *token = strtok(line, separator);
+  // alloca un array di 2 stringhe
+  // sizeof(char *) -> quanti byte occupa un puntatore a char
+  // puntatore a stringa occupa 8 byte
+  char **result = malloc(2 * sizeof(char *));
+  // tutta la linea
+  result[1] = line;
+  // NULL serve a passare al token successivo nella strtok
+  token = strtok(NULL, separator);
+
+  if (token != NULL) {
+    result[0] = token;
+  }
+  else {
+    result[0] = "MANCA";
+  }
+
+  return result;
+}
+
 // argc è un intero che indica il numero di parametri passato (lunghezza dell'array argv)
-// argv[0] è il nome con cui è stato avviato il programma
+// argv[0] è il nome del file eseguito
 int main(int argc, char *argv[]) {
 
   if(argc!=2) {
     printf("Uso: %s nomefile\n",argv[0]);
     exit(1);
   }
-
-  FILE *f = fopen(argv[1], "r");
-
-  if (f == NULL) {
-    termina("Errore apertura file");
-  }
+  
+  FILE *f_input = fopen(argv[1], "r");
+  verifica_file(f_input);
 
   char *line = NULL;
   size_t len = 0;
   ssize_t read;
-
-  // getline legge una riga dal file e restituisce il numero di caratteri letti.
-  // Se arriva a fine file oppure c'è un errore, restituisce -1.
-  // Inoltre può modificare line e len:
-  // - line può essere allocata o riallocata automaticamente
-  // - len viene aggiornato con la dimensione del buffer disponibile
-  while ((read = getline(&line, &len, f)) != -1) {
-    printf("%zd\n", read);
-    printf("%s", line);
+  
+  while ((read = getline(&line, &len, f_input)) != -1) {
+    // -2 perchè il terminatore di linea di windows è \r\n
+    line[strlen(line)-2] = '\0';
+    char **coppia = tokenizza_stringa(line);
+    printf("%s %s\n", coppia[0], coppia[1]);
+    free(coppia);
   }
-   printf("%zd\n", read);
 
   free(line);
-  fclose(f);
+  fclose(f_input);
+
+  return 0;
+  
 }
