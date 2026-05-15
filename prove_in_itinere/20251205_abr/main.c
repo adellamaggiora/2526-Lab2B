@@ -20,7 +20,7 @@
 // 5. free e controllo con valgrind su memoria
 
 // funzione che verifica se esiste il file
-void verifica_file(FILE *file) {
+void check_file_exists(FILE *file) {
   if (file == NULL) {
     printf("Errore apertura file");
     exit(1);
@@ -30,7 +30,7 @@ void verifica_file(FILE *file) {
 
 // line in input: 'prima linea'
 // output atteso: <linea> <prima linea>
-char **tokenizza_stringa(char *line) {
+char **tokenize(char *line) {
   char *separator = " ";
   int token_index = 1;
 
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
   }
   
   FILE *f_input = fopen(argv[1], "r");
-  verifica_file(f_input);
+  check_file_exists(f_input);
 
   char *line = NULL;
   size_t len = 0;
@@ -73,9 +73,9 @@ int main(int argc, char *argv[]) {
   while ((read = getline(&line, &len, f_input)) != -1) {
     // -2 perchè il terminatore di linea di windows è \r\n
     line[strlen(line)-2] = '\0';
-    char **coppia = tokenizza_stringa(line);
-    printf("%s %s\n", coppia[0], coppia[1]);
-    free(coppia);
+    char **couple = tokenize(line);
+    printf("%s %s\n", couple[0], couple[1]);
+    free(couple);
   }
 
   free(line);
