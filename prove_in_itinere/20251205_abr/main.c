@@ -30,27 +30,20 @@ void check_file_exists(FILE *file) {
 
 // line in input: 'prima linea'
 // output atteso: <linea> <prima linea>
-char **tokenize(char *line) {
+char **tokenize(const char *line) {
+  //sistemare 
   char *separator = " ";
   int token_index = 1;
-
-  char *token = strtok(line, separator);
+  char *cloned_line = strdup(line);
   // alloca un array di 2 stringhe
   // sizeof(char *) -> quanti byte occupa un puntatore a char
   // puntatore a stringa occupa 8 byte
   char **result = malloc(2 * sizeof(char *));
-  // tutta la linea
-  result[1] = line;
+  result[1] = cloned_line;
+  strtok(line, separator);
   // NULL serve a passare al token successivo nella strtok
-  token = strtok(NULL, separator);
-
-  if (token != NULL) {
-    result[0] = token;
-  }
-  else {
-    result[0] = "MANCA";
-  }
-
+  char *key = strtok(NULL, separator);
+  result[0] = key;
   return result;
 }
 
