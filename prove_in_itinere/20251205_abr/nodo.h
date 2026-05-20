@@ -14,6 +14,8 @@ nodo *nodo_crea(char *s1, char *s2);
 
 void nodo_stampa(const nodo *a, FILE *f);
 
-int nodi_uguali(const nodo *a, const nodo *b);
+int compara_nodi(const nodo *a, const nodo *b);
+
+void inserisci_nodo_in_albero(nodo *n, nodo *albero);
 
 #endif

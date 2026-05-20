@@ -45,8 +45,8 @@ char **tokenize(const char *line) {
   char *key = strtok(NULL, separator);
   //controlla il valore del puntatore, cioè l’indirizzo contenuto in key, non la stringa puntata.
   if(key == NULL) {
-    //non scrive dentro la memoria puntata da key. 
-    //Cambia dove punta key: ora key punta a una string literal vuota, 
+    // non scrive dentro la memoria puntata da key. 
+    // Cambia dove punta key: ora key punta a una string literal vuota, 
     key = ""; 
   }
   result[0] = strdup(key);
@@ -68,11 +68,24 @@ int main(int argc, char *argv[]) {
   size_t len = 0;
   ssize_t read;
   
+  nodo *albero;
+  int counter = 0;
+
   while ((read = getline(&line, &len, f_input)) != -1) {
     // -2 perchè il terminatore di linea di windows è \r\n
     line[strlen(line)-2] = '\0';
     char **couple = tokenize(line);
-    printf("%s - %s\n", couple[0], couple[1]);
+    // printf("%s - %s\n", couple[0], couple[1]);
+    
+    nodo *n = nodo_crea(couple[0], couple[1]);
+    if(counter == 0) {
+      albero = n;
+      counter++;
+    }
+    else {
+      inserisci_nodo_in_albero(n, albero);
+    }
+    visita_albero(albero);
     free(couple[0]);
     free(couple[1]);
     free(couple);
