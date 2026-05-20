@@ -43,10 +43,15 @@ char **tokenize(const char *line) {
   strtok(line, separator);
   // NULL serve a passare al token successivo nella strtok
   char *key = strtok(NULL, separator);
-  result[0] = key;
+  //controlla il valore del puntatore, cioè l’indirizzo contenuto in key, non la stringa puntata.
+  if(key == NULL) {
+    //non scrive dentro la memoria puntata da key. 
+    //Cambia dove punta key: ora key punta a una string literal vuota, 
+    key = ""; 
+  }
+  result[0] = strdup(key);
   return result;
 }
-
 // argc è un intero che indica il numero di parametri passato (lunghezza dell'array argv)
 // argv[0] è il nome del file eseguito
 int main(int argc, char *argv[]) {
@@ -67,7 +72,9 @@ int main(int argc, char *argv[]) {
     // -2 perchè il terminatore di linea di windows è \r\n
     line[strlen(line)-2] = '\0';
     char **couple = tokenize(line);
-    printf("%s %s\n", couple[0], couple[1]);
+    printf("%s - %s\n", couple[0], couple[1]);
+    free(couple[0]);
+    free(couple[1]);
     free(couple);
   }
 
