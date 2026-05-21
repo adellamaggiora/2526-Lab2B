@@ -62,7 +62,10 @@ void visita_albero(nodo *albero, FILE *f) {
         return;
     }
     visita_albero(albero->left, f);
-    // printf("%s: %s", albero->chiave, albero->linea);
+    int chiave_vuota = (strcmp(albero->chiave, "") == 0);
+    if(chiave_vuota) {
+        albero->chiave = "MANCA";
+    }
     nodo_stampa(albero, f);
     visita_albero(albero->right, f);
 }

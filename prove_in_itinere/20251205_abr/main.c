@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
     free(couple[1]);
     free(couple);
   }
-
+  // albero pronto
   free(line);
   fclose(f_input);
 

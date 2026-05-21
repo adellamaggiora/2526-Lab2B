@@ -1,6 +1,6 @@
-<              > <>
-<              > <fine>
-<              > <lineasenzasecondaparola>
+<MANCA         > <>
+<MANCA         > <fine>
+<MANCA         > <lineasenzasecondaparola>
 <RICORDA       > <QUI RICORDA CHE LE MAIUSCOLE PRECEDONO LE MINUSCOLE>
 <linea         > <altra linea>
 <linea         > <prima linea>
