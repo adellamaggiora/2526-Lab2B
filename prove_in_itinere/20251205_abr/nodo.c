@@ -33,21 +33,19 @@ int compara_nodi(const nodo *a, const nodo *b) {
 void inserisci_nodo_in_albero(nodo *n, nodo *albero) {
     int ris_compara = compara_nodi(n, albero);
 
-    if(albero->left == NULL && albero->right == NULL) {
-        if(ris_compara > 0) {
-            albero->right = n;
-        }
-        else if(ris_compara < 0) {
-            albero->left = n;
-        }
-        else {
-            free(n);
-            fprintf(stderr, "errore: nodi uguali\n");
-        }
+    // caso base
+    if(ris_compara < 0 && albero->left == NULL) {
+        albero->left = n;
         return;
     }
-    // n > albero; si inserisce nel sottoalbero destro
-    if(ris_compara > 0) {
+    else if(ris_compara > 0 && albero->right == NULL) {
+        albero->right = n;
+        return;
+    }
+
+
+    // casi ricorsivi
+    else if(ris_compara > 0) {
         inserisci_nodo_in_albero(n, albero->right);
     }
     else if(ris_compara < 0) {
@@ -59,11 +57,12 @@ void inserisci_nodo_in_albero(nodo *n, nodo *albero) {
     }
 }
 
-void visita_albero(nodo *albero) {
+void visita_albero(nodo *albero, FILE *f) {
     if(albero == NULL) {
         return;
     }
-    visita_albero(albero->left);
-    printf("%s: %s", albero->chiave, albero->linea);
-    visita_albero(albero->right);
+    visita_albero(albero->left, f);
+    // printf("%s: %s", albero->chiave, albero->linea);
+    nodo_stampa(albero, f);
+    visita_albero(albero->right, f);
 }

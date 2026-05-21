@@ -75,7 +75,6 @@ int main(int argc, char *argv[]) {
     // -2 perchè il terminatore di linea di windows è \r\n
     line[strlen(line)-2] = '\0';
     char **couple = tokenize(line);
-    // printf("%s - %s\n", couple[0], couple[1]);
     
     nodo *n = nodo_crea(couple[0], couple[1]);
     if(counter == 0) {
@@ -85,7 +84,6 @@ int main(int argc, char *argv[]) {
     else {
       inserisci_nodo_in_albero(n, albero);
     }
-    visita_albero(albero);
     free(couple[0]);
     free(couple[1]);
     free(couple);
@@ -93,6 +91,9 @@ int main(int argc, char *argv[]) {
 
   free(line);
   fclose(f_input);
+
+  FILE *f_output = fopen("output.txt", "w");
+  visita_albero(albero, f_output);
 
   return 0;
   
