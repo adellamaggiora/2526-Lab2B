@@ -8,6 +8,7 @@ int buffer_index = 0;
 int prime_counter = 0;
 int buffer_size = 0;
 pthread_mutex_t mutex_buffer;//per accesso al buffer e all'indice
+pthread_mutex_t mutex_counter; 
 
 typedef struct {
     int *numbers;
@@ -37,15 +38,18 @@ BufferInfo read_numbers(char *file_name) {
 }
 
 int count_prime_numbers() {
-    while(buffer_index < buffer_size){
-        pthread_mutex_lock(&mutex_buffer);
-        int number = buffer[buffer_index];
-        buffer_index++;
-        pthread_mutex_unlock(&mutex_buffer);
-        
-        if(is_prime(number)) {
+    // accesso esclusivo all'indice 
+    pthread_mutex_lock(&mutex_buffer);
+    int current_index = buffer_index;
+    buffer_index++;
+    pthread_mutex_unlock(&mutex_buffer);
+
+    while(current_index < buffer_size){  
+        if(is_prime(buffer[current_index])) {
+            pthread_mutex_lock(&mutex_counter);
             prime_counter++;
-        }  
+            pthread_mutex_unlock(&mutex_counter);
+        }
     }
 
 }
