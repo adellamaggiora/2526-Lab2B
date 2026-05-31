@@ -103,7 +103,9 @@ int main(int argc, char *argv[])
     if(e!=1) break; // se il valore e' letto correttamente e==1
     assert(n>0);    // i valori del file devono essere positivi
     xsem_wait(&sem_free_slots,__LINE__,__FILE__);
+    xpthread_mutex_lock(&mu,__LINE__,__FILE__);
     buffer[pindex++ % Buf_size]= n;
+    xpthread_mutex_unlock(&mu,__LINE__,__FILE__);
     xsem_post(&sem_data_items,__LINE__,__FILE__);
   }
   puts("Dati del file scritti nel buffer");
