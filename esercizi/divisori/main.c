@@ -24,7 +24,7 @@ typedef struct
     int buf_index;
     sem_t *sem_free_slots;
     sem_t *sem_data_items;
-    pthread_mutex_t *m_outfile;
+    pthread_mutex_t *m_file_out;
     int outfile_line;
     pthread_t thread;
 } ConsumerData;
@@ -50,7 +50,8 @@ void *write_positive_numbers(void *arg)
     if (file_in == NULL) {perror("Errore apertura file"); return -1;}
     xsem_wait(producer_data->sem_free_slots,QUI);
     xpthread_mutex_lock(producer_data->m_buffer_index, QUI);
-    int free_slots = producer_data->*sem_free_slots;
+    int free_slots = -1;
+    sem_getvalue(producer_data->sem_free_slots, &free_slots);
     bool positive_found = false;
     int x;
     while (fscanf(file_in, "%d", &x) == 1) 
@@ -63,7 +64,7 @@ void *write_positive_numbers(void *arg)
             producer_data->buffer[index];
             producer_data->buf_index++;
             free_slots--;
-            xsem_wait(producerdata->sem_free_slots,QUI);
+            xsem_wait(producer_data->sem_free_slots,QUI);
             xsem_post(producer_data->sem_data_items,QUI);
         }   
     }
@@ -109,7 +110,7 @@ int main(int argc, char *argv[])
     pthread_mutex_t mu_file_out = PTHREAD_MUTEX_INITIALIZER;
     int total_consumers = argv[argc];
     ConsumerData consumer_data[total_consumers];
-    outfile_line = 0;
+    int outfile_line = 0;
     for(int i = 0; i < total_producers; i++) 
     {
         consumer_data[i].file_out = file_out;
@@ -118,7 +119,7 @@ int main(int argc, char *argv[])
         consumer_data[i].buf_index = &buf_index;
         consumer_data[i].sem_free_slots = &sem_free_slots;
         consumer_data[i].sem_data_items = &sem_data_items;
-        consumer_data[i].m_file_out = &mu_file_out;
+        consumer_data[i].file_out = &mu_file_out;
         consumer_data[i].outfile_line = &outfile_line;
         xpthread_create(producer_data[i].thread,NULL,write_outfile,consumer_data+i,QUI);
     }
