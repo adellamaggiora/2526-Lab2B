@@ -3,7 +3,6 @@
 #define QUI __LINE__,__FILE__
 // c <= p <= c + buf_size
 
-// struct contenente i parametri di input e output di ogni thread produttore 
 typedef struct
 {
     char *file_in;
@@ -15,7 +14,7 @@ typedef struct
     pthread_t thread;
 } ProducerData;
 
-// struct contenente i parametri di input e output di ogni thread produttore 
+
 typedef struct
 {
     FILE *file_out;
@@ -25,57 +24,50 @@ typedef struct
     sem_t *sem_free_slots;
     sem_t *sem_data_items;
     pthread_mutex_t *m_file_out;
-    int file_out_line;
     pthread_t thread;
 } ConsumerData;
 
-//prende degli interi positivi da un file e gli carica in mutua esclusione su un buffer 
+/*
+    PRODUCER
+*/
 void *write_positive_numbers(void *arg)
 {
-    // verifico se sem_free_slots = 0, se si vo in attesa
-    // sia sem_free_slots = n, con n != 0 
-    // fo la fscan del file -> prendo n dati -> prendo solo i positivi (il tutto avviene in parallelo)
-    // e li metto in un array positives
-
-    // in un ciclo ad positives.length eseguo questi passi:
-    // 1. prendo il mutex sull'indice del buffer
-    // 2. ci metto il dato 
-    // 3. incremento p_index (l'indice del produttore)
-    // 4. rilascio il mutex
-
-    // WARNING: l'invariante secondo cui, quando il consumatore accede a un indice, trova SEMPRE il dato,
-    // non viene rispettata, un consumatore potrebbe trovare un dato nullo e restituire SIGFAULT
     ProducerData *producer_data = (ProducerData*) arg;
     FILE *file_in = fopen(producer_data->file_in, "r");
     if (file_in == NULL) {perror("Errore apertura file"); return -1;}
     xsem_wait(producer_data->sem_free_slots,QUI);
     xpthread_mutex_lock(producer_data->m_buffer_index, QUI);
     xsem_post(producer_data->sem_free_slots,QUI);
-    int free_slots = -1;
-    sem_getvalue(producer_data->sem_free_slots, &free_slots);
     int x;
+    int free_slots = -1;
     while (fscanf(file_in, "%d", &x) == 1) 
     {
+        sem_getvalue(producer_data->sem_free_slots, &free_slots);
+        if (free_slots == 0) {
+            xpthread_mutex_unlock(producer_data->m_buffer_index, QUI);
+            xsem_wait(producer_data->sem_free_slots,QUI);
+            xpthread_mutex_lock(producer_data->m_buffer_index, QUI);
+        }
         if (x > 0) 
         {
-            positive_found = true;
-            if(free_slots == 0){break;}
-            int index = producer_data->buf_index;
-            producer_data->buffer[index];
-            producer_data->buf_index = index + 1;
-            free_slots--;
             xsem_wait(producer_data->sem_free_slots,QUI);
+            int index = producer_data->buf_index % buf_size;
+            producer_data->buffer[index] = x;
+            producer_data->buf_index++; 
             xsem_post(producer_data->sem_data_items,QUI);
         }   
     }
     xpthread_mutex_unlock(producer_data->m_buffer_index, QUI);
+    fclose(file_in);
+    return NULL;
 }
 
+/**
+    CONSUMER
+*/
 void write_file_out(void *arg)
 {
-    // sezioni critiche: buffer e file_out
 
-    // estrarre un valore dal buffer in mutua esclusione
     ConsumerData *consumer_data = (ConsumerData*) arg;
     // !! da interrompere quando i produttori hanno finito !!
     while(1) {
@@ -88,37 +80,31 @@ void write_file_out(void *arg)
         for(int i=data_items; i>0; i--) {
             int element = buffer[consumer_data->buffer_index-i];
             elements[i] = element;
-            xsem_wait(producer_data->sem_data_items,QUI);
-            xsem_post(producer_data->sem_free_slots,QUI);
+            xsem_wait(consumer_data->sem_data_items,QUI);
+            xsem_post(consumer_data->sem_free_slots,QUI);
         }
         xpthread_mutex_unlock(consumer_data->m_buffer_index, QUI);
-
-        // calcolo dei divisori (fuori sez critica)
+        
         for(int i=0; i<data_items; i++) {
             int element = elements[i];
-            get_dividers(element);
+            int dividers_count = get_dividers_count(element);
+            xpthread_mutex_lock(consumer_data->m_file_out, QUI);
+            fprintf(consumer_data->file_out, "%d %d \n", element, dividers_count);
+            xpthread_mutex_unlock(consumer_data->m_file_out, QUI);
         }
-
-        int dividers = get_dividers
-
-        // scrittura nel file_out (sez critica)
-
     }
-    
 }
 
-int *get_dividers(int n, int *count)
+
+int get_dividers_count(int n)
 {
-    int *tmp = malloc(sizeof(int) * n); // worst case: tutti i numeri
-    int k = 0;
-    for (int i = 1; i <= n; i++) {
-        if (n % i == 0) {
-            tmp[k++] = i;
-        }
-    }
-    *count = k;
-    return tmp;
+  assert(n>0);
+  int d = 0;
+  for (int i=1; i<=n; i ++)
+      if(n%i==0) d++;
+  return d;
 }
+
 
 int main(int argc, char *argv[]) 
 {
@@ -131,15 +117,17 @@ int main(int argc, char *argv[])
     int buffer[buf_size];
     int buf_index = 0;  
     sem_t sem_free_slots, sem_data_items;
-    xsem_init(&sem_free_slots,0,buf_size,QUI);
-    xsem_init(&sem_data_items,0,0,QUI);
+    // 0 -> thread dell stesso processo
+    // buf_size -> valore iniziale semaforo 
+    xsem_init(&sem_free_slots, 0, buf_size, QUI);
+    xsem_init(&sem_data_items, 0, 0, QUI);
     int total_producers = argc - 3;
     ProducerData producer_data[total_producers];
     for(int i = 1; i <= total_producers; i++) 
     {
         producer_data[i].file_in = argv[i];
         producer_data[i].m_buffer_index = &mu;
-        producer_data[i].buffer = buffer;
+        producer_data[i].buffer = &buffer;
         producer_data[i].buf_index = &buf_index;
         producer_data[i].sem_free_slots = &sem_free_slots;
         producer_data[i].sem_data_items = &sem_data_items;
@@ -151,22 +139,20 @@ int main(int argc, char *argv[])
             QUI
         );
     }
-    FILE *file_out = fopen(argv[argc-1], "r");
+    FILE *file_out = fopen(argv[argc-1], "a");
     if(file_out == NULL) {perror("Errore apertura file"); return -1;}
     pthread_mutex_t mu_file_out = PTHREAD_MUTEX_INITIALIZER;
     int total_consumers = argv[argc];
     ConsumerData consumer_data[total_consumers];
-    int file_out_line = 0;
-    for(int i = 0; i < total_producers; i++) 
+    for(int i = 0; i < total_consumers; i++) 
     {
         consumer_data[i].file_out = file_out;
         consumer_data[i].m_buffer_index = &mu;
-        consumer_data[i].buffer = buffer;
+        consumer_data[i].buffer = &buffer;
         consumer_data[i].buf_index = &buf_index;
         consumer_data[i].sem_free_slots = &sem_free_slots;
         consumer_data[i].sem_data_items = &sem_data_items;
-        consumer_data[i].file_out = &mu_file_out;
-        consumer_data[i].file_out_line = &file_out_line;
+        consumer_data[i].m_file_out = &mu_file_out;
         xpthread_create(
             producer_data[i].thread,
             NULL,
