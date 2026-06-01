@@ -25,7 +25,7 @@ typedef struct
     sem_t *sem_free_slots;
     sem_t *sem_data_items;
     pthread_mutex_t *m_file_out;
-    int outfile_line;
+    int file_out_line;
     pthread_t thread;
 } ConsumerData;
 
@@ -50,9 +50,9 @@ void *write_positive_numbers(void *arg)
     if (file_in == NULL) {perror("Errore apertura file"); return -1;}
     xsem_wait(producer_data->sem_free_slots,QUI);
     xpthread_mutex_lock(producer_data->m_buffer_index, QUI);
+    xsem_post(producer_data->sem_free_slots,QUI);
     int free_slots = -1;
     sem_getvalue(producer_data->sem_free_slots, &free_slots);
-    bool positive_found = false;
     int x;
     while (fscanf(file_in, "%d", &x) == 1) 
     {
@@ -62,22 +62,57 @@ void *write_positive_numbers(void *arg)
             if(free_slots == 0){break;}
             int index = producer_data->buf_index;
             producer_data->buffer[index];
-            producer_data->buf_index++;
+            producer_data->buf_index = index + 1;
             free_slots--;
             xsem_wait(producer_data->sem_free_slots,QUI);
             xsem_post(producer_data->sem_data_items,QUI);
         }   
     }
-    if(positive_found == false) 
-    {
-        xsem_post(producer_data->sem_free_slots,QUI);
-    }
     xpthread_mutex_unlock(producer_data->m_buffer_index, QUI);
 }
 
-write_outfile()
+void write_file_out(void *arg)
 {
+    // sezioni critiche: buffer e file_out
 
+    // estrarre un valore dal buffer in mutua esclusione
+    ConsumerData *consumer_data = (ConsumerData*) arg;
+    // !! da interrompere quando i produttori hanno finito !!
+    while(1) {
+        xsem_wait(consumer_data->sem_data_items, QUI);
+        xpthread_mutex_lock(consumer_data->m_buffer_index, QUI);
+        xsem_post(consumer_data->sem_data_items, QUI);
+        int data_items = -1; // elementi da estarre dal buffer e scrivere nel file
+        sem_getvalue(consumer_data->sem_data_items, &data_items);
+        int elements[data_items];
+        for(int i=data_items; i>0; i--) {
+            int element = buffer[consumer_data->buffer_index-i];
+            elements[i] = element;
+            xsem_wait(producer_data->sem_data_items,QUI);
+            xsem_post(producer_data->sem_free_slots,QUI);
+        }
+        xpthread_mutex_unlock(consumer_data->m_buffer_index, QUI);
+
+        // calcolo dei divisori (fuori sez critica)
+
+
+        // scrittura nel file_out (sez critica)
+
+    }
+    
+}
+
+int *dividers(int n, int *count)
+{
+    int *tmp = malloc(sizeof(int) * n); // worst case: tutti i numeri
+    int k = 0;
+    for (int i = 1; i <= n; i++) {
+        if (n % i == 0) {
+            tmp[k++] = i;
+        }
+    }
+    *count = k;
+    return tmp;
 }
 
 int main(int argc, char *argv[]) 
@@ -89,7 +124,7 @@ int main(int argc, char *argv[])
     }
     pthread_mutex_t mu = PTHREAD_MUTEX_INITIALIZER;
     int buffer[buf_size];
-    int buf_index=0;  
+    int buf_index = 0;  
     sem_t sem_free_slots, sem_data_items;
     xsem_init(&sem_free_slots,0,buf_size,QUI);
     xsem_init(&sem_data_items,0,0,QUI);
@@ -103,14 +138,20 @@ int main(int argc, char *argv[])
         producer_data[i].buf_index = &buf_index;
         producer_data[i].sem_free_slots = &sem_free_slots;
         producer_data[i].sem_data_items = &sem_data_items;
-        xpthread_create(producer_data[i].thread,NULL,write_positive_numbers,producer_data+i,QUI);
+        xpthread_create(
+            producer_data[i].thread,
+            NULL,
+            write_positive_numbers,
+            producer_data+i,
+            QUI
+        );
     }
     FILE *file_out = fopen(argv[argc-1], "r");
     if(file_out == NULL) {perror("Errore apertura file"); return -1;}
     pthread_mutex_t mu_file_out = PTHREAD_MUTEX_INITIALIZER;
     int total_consumers = argv[argc];
     ConsumerData consumer_data[total_consumers];
-    int outfile_line = 0;
+    int file_out_line = 0;
     for(int i = 0; i < total_producers; i++) 
     {
         consumer_data[i].file_out = file_out;
@@ -120,8 +161,14 @@ int main(int argc, char *argv[])
         consumer_data[i].sem_free_slots = &sem_free_slots;
         consumer_data[i].sem_data_items = &sem_data_items;
         consumer_data[i].file_out = &mu_file_out;
-        consumer_data[i].outfile_line = &outfile_line;
-        xpthread_create(producer_data[i].thread,NULL,write_outfile,consumer_data+i,QUI);
+        consumer_data[i].file_out_line = &file_out_line;
+        xpthread_create(
+            producer_data[i].thread,
+            NULL,
+            write_file_out,
+            consumer_data+i,
+            QUI
+        );
     }
     return 0;
 }
