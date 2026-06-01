@@ -94,7 +94,12 @@ void write_file_out(void *arg)
         xpthread_mutex_unlock(consumer_data->m_buffer_index, QUI);
 
         // calcolo dei divisori (fuori sez critica)
+        for(int i=0; i<data_items; i++) {
+            int element = elements[i];
+            get_dividers(element);
+        }
 
+        int dividers = get_dividers
 
         // scrittura nel file_out (sez critica)
 
@@ -102,7 +107,7 @@ void write_file_out(void *arg)
     
 }
 
-int *dividers(int n, int *count)
+int *get_dividers(int n, int *count)
 {
     int *tmp = malloc(sizeof(int) * n); // worst case: tutti i numeri
     int k = 0;
