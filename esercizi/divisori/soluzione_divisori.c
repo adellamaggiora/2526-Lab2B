@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
   int buffer[Buf_size];
   int pindex=0, cindex=0;
   pthread_mutex_t mupbuf = PTHREAD_MUTEX_INITIALIZER;
-  pthread_mutex_t mucbuf = PTHREAD_MUTEX_INITIALIZER;
+  pthread_mutex_t cmubuf = PTHREAD_MUTEX_INITIALIZER;
   pthread_mutex_t mucfile = PTHREAD_MUTEX_INITIALIZER;
   sem_t sem_free_slots, sem_data_items;
   xsem_init(&sem_free_slots,0,Buf_size,__LINE__,__FILE__);
