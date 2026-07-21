@@ -15,6 +15,7 @@ RUN apt-get update -o Acquire::Retries=5 \
         vim \
         nano \
         python3-pip \
+        openjdk-17-jdk \
     && pip3 install --break-system-packages \
         gdbgui \
         gevent \
@@ -24,5 +25,7 @@ RUN apt-get update -o Acquire::Retries=5 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
+
+EXPOSE 5005
 
 CMD ["/bin/bash"]
