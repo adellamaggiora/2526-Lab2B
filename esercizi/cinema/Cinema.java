@@ -43,30 +43,46 @@ contenuto del file attrici.txt della prima parte dell'esercizio.
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
-public Class Mappa{
-    String nome;
-    Set<String> professioni;
-    public Mappa(){
-        this.nome = nome;
-        this.professioni = professioni;
+
+public class Cinema {
+    Map<String, Set<String>> professionPeapleMap;
+
+    public Cinema() {
+        this.professionPeapleMap = new HashMap();
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         //verifico se il numero di argomenti è almeno 2 (deve guardare se sulla riga di comando ci sono almeno 2 argomenti)
-        if(args.length!=1){
+        if(args.length!=1) {
             System.out.println("Uso: java Citta nomefile");
             System.exit(1);
         }
         //come leggere la riga di un file:
-        try
-        {
-            BufferedReader br = new BufferedReader(new FileReader(args[0]));
-            String linea = br.readLine();
-            String[] columns = linea.split("/t");
-            //dovrebbe essere creato un'array che contiene tutti gli utenti di questo tipo, il prossimo passaggio è proprio questo
-            Mappa utente = new Mappa(columns[1], columns[4]);
+        try {
+            String fileName = args[0];
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            String line;
+
+            while((line = br.readLine()) != null) {
+                String[] columns = line.split("\t");
+                String name = columns[0];
+                String[] professions = columns[4].split(",");
+                for(String profession : professions){
+                    //mi faccio tutti i set, postini, attori, produttori ecc. 
+                    this.professionPeapleMap.put(profession, name);
+                }
+                System.out.println(columns[1]);
+            }
+            br.close();
+        }
+        catch(Exception e) {
+            System.err.println("Errore: " + e);
+            e.printStackTrace();
+            System.exit(2);
         }
     }
 }
