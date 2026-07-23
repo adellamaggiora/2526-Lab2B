@@ -37,19 +37,36 @@ contenuto del file attrici.txt della prima parte dell'esercizio.
 //costruttore: prende name e professions e le associa ai campi dell'oggetto appena creato
 //metodo main: legge un file riga per riga, estrae nome e professione, aggiorna la mappa, poi in un try scrive le linee
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class Cinema {
 
-    Map<String, Set<String>> professionPeapleMap;
+
+    Map<String, Set<String>> professionWorkers;
+
 
     public Cinema() {
-        this.professionPeapleMap = new HashMap();
+        this.professionWorkers = new HashMap();
     }
+
+    /* 
+    public Set<string> getWorkers(String profession) {
+        return this.professionWorkers.get(profession);
+    }
+
+    public TreeSet<string> sortWorkers(String profession) {
+        return new TreeSet<String>(this.getWorkers(profession));
+    }
+    */
+
 
     public static void main(String[] args) {
         //verifico se il numero di argomenti è almeno 2 (deve guardare se sulla riga di comando ci sono almeno 2 argomenti)
@@ -60,26 +77,40 @@ public class Cinema {
         //come leggere la riga di un file:
         try {
             String fileName = args[0];
-            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
             String line;
             Cinema result = new Cinema();
 
-            while ((line = br.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 String[] columns = line.split("\t");
-                String name = columns[0];
+                String name = columns[1];
                 String[] professions = columns[4].split(",");
                 for (String profession : professions) {
-                    Set<String> workersWithThatProfession = result.professionPeapleMap.get(profession);
-                    if (workersWithThatProfession == null) {
-                        workersWithThatProfession = new HashSet();
+                    Set<String> workers = result.professionWorkers.get(profession);
+                    if (workers == null) {
+                        workers = new HashSet();
                     }
-                    workersWithThatProfession.add(name);
-                    result.professionPeapleMap.put(profession, workersWithThatProfession);
+                    workers.add(name);
+                    result.professionWorkers.put(profession, workers);
                 }
-                System.out.println(result.professionPeapleMap);
             }
-            br.close();
+            reader.close();
+
+            Set<String> actresses = result.professionWorkers.get("actress");
+            Set<String> sortedActresses = new TreeSet<String>(actresses);
+            
+            BufferedWriter writer = new BufferedWriter(new FileWriter("attrici.txt"));
+
+            for (String actress : sortedActresses) {
+                System.out.println(actress);
+                writer.write(actress);
+                writer.newLine();
+            }
+
+            writer.close();
+            
         } catch (Exception e) {
+            
             System.err.println("Errore: " + e);
             e.printStackTrace();
             System.exit(2);
