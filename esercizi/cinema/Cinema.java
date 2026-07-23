@@ -26,29 +26,25 @@ Seconda parte Durante la lettura del file, costruire anche una mappa che associa
 delle persone con quella professione. Al termine, per ogni professione (ad esempio actor) scrivere un file actor.txt 
 contenente l'elenco delle persone con quella professione. Si noti che il file actress.txt dovrebbe avere lo stesso 
 contenuto del file attrici.txt della prima parte dell'esercizio.
-*/
+ */
 
 //cosa deve fare il main?
-
 //aprire il file -> leggere riga per riga -> estrarre nome e professioni-> mappa<nome,professione>->
 //terminata la lettura scrive nel file attrici.txt l'elenco delle attrici ordinato alfabeticamnte dentro
 //un try -> per ogni professione, scrivere un file che contiene l'elenco delle persone con quella professione
-
 //oggetti da realizzare?
-
 //oggetto map<name, professions>
-    //costruttore: prende name e professions e le associa ai campi dell'oggetto appena creato
-    //metodo main: legge un file riga per riga, estrae nome e professione, aggiorna la mappa, poi in un try scrive le linee
-
-
+//costruttore: prende name e professions e le associa ai campi dell'oggetto appena creato
+//metodo main: legge un file riga per riga, estrae nome e professione, aggiorna la mappa, poi in un try scrive le linee
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
 public class Cinema {
+
     Map<String, Set<String>> professionPeapleMap;
 
     public Cinema() {
@@ -57,8 +53,8 @@ public class Cinema {
 
     public static void main(String[] args) {
         //verifico se il numero di argomenti è almeno 2 (deve guardare se sulla riga di comando ci sono almeno 2 argomenti)
-        if(args.length!=1) {
-            System.out.println("Uso: java Citta nomefile");
+        if (args.length != 1) {
+            System.out.println("Uso: java Cinema nomefile");
             System.exit(1);
         }
         //come leggere la riga di un file:
@@ -66,20 +62,24 @@ public class Cinema {
             String fileName = args[0];
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             String line;
+            Cinema result = new Cinema();
 
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 String[] columns = line.split("\t");
                 String name = columns[0];
                 String[] professions = columns[4].split(",");
-                for(String profession : professions){
-                    //mi faccio tutti i set, postini, attori, produttori ecc. 
-                    this.professionPeapleMap.put(profession, name);
+                for (String profession : professions) {
+                    Set<String> workersWithThatProfession = result.professionPeapleMap.get(profession);
+                    if (workersWithThatProfession == null) {
+                        workersWithThatProfession = new HashSet();
+                    }
+                    workersWithThatProfession.add(name);
+                    result.professionPeapleMap.put(profession, workersWithThatProfession);
                 }
-                System.out.println(columns[1]);
+                System.out.println(result.professionPeapleMap);
             }
             br.close();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Errore: " + e);
             e.printStackTrace();
             System.exit(2);
