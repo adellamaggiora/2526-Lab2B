@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <linea         > <prima linea>
 <linea         > <seconda linea>
 inea         > <seconda linea>
@@ -11,3 +12,15 @@ ooooooooooooooolto lunga>
 <ripetuta      > <linea ripetuta più volte>
 ipetuta più volte>
 ea ripetuta più volte>
+=======
+<MANCA         > <>
+<MANCA         > <fine>
+<MANCA         > <lineasenzasecondaparola>
+<RICORDA       > <QUI RICORDA CHE LE MAIUSCOLE PRECEDONO LE MINUSCOLE>
+<linea         > <altra linea>
+<linea         > <prima linea>
+<linea         > <seconda linea>
+<molto         > <linea molto moooooooooooooooooooooooooooooooooooooolto lunga>
+<prossima      > <la prossima linea è vuota>
+<ripetuta      > <linea ripetuta più volte>
+>>>>>>> ebf426f3c87f72b8c8bbe918a18358104f659f1a
