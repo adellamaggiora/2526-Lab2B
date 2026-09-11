@@ -18,4 +18,8 @@ int compara_nodi(const nodo *a, const nodo *b);
 
 void inserisci_nodo_in_albero(nodo *n, nodo *albero);
 
+void aggiungi_chiave_mancante(nodo *n);
+
+void visita_albero(nodo *albero, FILE *f);
+
 #endif

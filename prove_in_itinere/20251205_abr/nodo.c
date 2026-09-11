@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h> 
+#include <stdio.h>
 #include "nodo.h"
 
-nodo *nodo_crea(char *s1, char *s2) {
+nodo *nodo_crea(char *s1, char *s2)
+{
     nodo *a = malloc(sizeof(*a));
 
     a->chiave = strdup(s1);
@@ -16,54 +17,63 @@ nodo *nodo_crea(char *s1, char *s2) {
 }
 
 // il const dice: dentro questa funzione, a punta a un nodo che non deve essere modificato.
-void nodo_stampa(const nodo *a, FILE *f) {
+void nodo_stampa(const nodo *a, FILE *f)
+{
     fprintf(f, "<%-14s> <%s>\n", a->chiave, a->linea);
 }
 
-// a > b => positivo; a < b => negativo; a = b => 0; 
-int compara_nodi(const nodo *a, const nodo *b) {
+// a > b => positivo; a < b => negativo; a = b => 0;
+int compara_nodi(const nodo *a, const nodo *b)
+{
 
     int ris_strcmp = strcmp(a->chiave, b->chiave);
-    if(ris_strcmp == 0) {
+    if (ris_strcmp == 0)
+    {
         ris_strcmp = strcmp(a->linea, b->linea);
     }
-    return ris_strcmp; 
+    return ris_strcmp;
 }
 
-void inserisci_nodo_in_albero(nodo *n, nodo *albero) {
-    int ris_compara = compara_nodi(n, albero);
+void inserisci_nodo_in_albero(nodo *n, nodo *albero)
+{
+    int ris = compara_nodi(n, albero);
 
-    if(albero->left == NULL && albero->right == NULL) {
-        if(ris_compara > 0) {
+    if (ris > 0) {
+        if (albero->right == NULL)
             albero->right = n;
-        }
-        else if(ris_compara < 0) {
+        else
+            inserisci_nodo_in_albero(n, albero->right);
+    }
+    else if (ris < 0) {
+        if (albero->left == NULL)
             albero->left = n;
-        }
-        else {
-            free(n);
-            fprintf(stderr, "errore: nodi uguali\n");
-        }
-        return;
-    }
-    // n > albero; si inserisce nel sottoalbero destro
-    if(ris_compara > 0) {
-        inserisci_nodo_in_albero(n, albero->right);
-    }
-    else if(ris_compara < 0) {
-        inserisci_nodo_in_albero(n, albero->left);
+        else
+            inserisci_nodo_in_albero(n, albero->left);
     }
     else {
+        // meglio: nodo_distruggi(n), non solo free(n)
         free(n);
         fprintf(stderr, "errore: nodi uguali\n");
     }
 }
 
-void visita_albero(nodo *albero) {
-    if(albero == NULL) {
+void aggiungi_chiave_mancante(nodo *n)
+{
+    if (n->chiave == NULL)
+    {
+        n->chiave = "MANCA";
+    }    
+}
+
+void visita_albero(nodo *albero, FILE *f)
+{
+    if (albero == NULL)
+    {
         return;
     }
-    visita_albero(albero->left);
-    printf("%s: %s", albero->chiave, albero->linea);
-    visita_albero(albero->right);
+    visita_albero(albero->left, f);
+    aggiungi_chiave_mancante(albero);
+    nodo_stampa(albero, f);
+    // printf("%s: %s", albero->chiave, albero->linea);
+    visita_albero(albero->right, f);
 }

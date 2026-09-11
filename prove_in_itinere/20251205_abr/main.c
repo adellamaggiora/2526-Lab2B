@@ -5,6 +5,11 @@
 #include <errno.h>    // richiesto per usare errno dentro termina()
 #include "nodo.h"
 
+// import per windows
+#ifdef _WIN32
+#include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif
 // inserimento dei nodi in un ABR secondo il seguente ordinamento:
 
 // ordinamento nodi secondi il campo chiave
@@ -66,18 +71,20 @@ int main(int argc, char *argv[]) {
 
   char *line = NULL;
   size_t len = 0;
-  ssize_t read;
+  // si usa ssize_t al posto di int perchè
+  // -1 -> errore; 0 -> niente letto; > 0 -> byte letti
+  ssize_t nread;
   
   nodo *albero;
   int counter = 0;
 
-  while ((read = getline(&line, &len, f_input)) != -1) {
+  while ((nread = getline(&line, &len, f_input)) != -1) {
     // -2 perchè il terminatore di linea di windows è \r\n
     line[strlen(line)-2] = '\0';
     char **couple = tokenize(line);
     // printf("%s - %s\n", couple[0], couple[1]);
-    
     nodo *n = nodo_crea(couple[0], couple[1]);
+
     if(counter == 0) {
       albero = n;
       counter++;
@@ -85,7 +92,8 @@ int main(int argc, char *argv[]) {
     else {
       inserisci_nodo_in_albero(n, albero);
     }
-    visita_albero(albero);
+    FILE *f_output = fopen("output.txt", "w");
+    visita_albero(albero, f_output);
     free(couple[0]);
     free(couple[1]);
     free(couple);
