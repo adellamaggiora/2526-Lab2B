@@ -15,7 +15,7 @@ SOURCES = src/main.c \
 	src/modules/msf.c \
 	src/modules/operations.c \
 	src/modules/parser.c \
-	src/modules/union-find.c \
+	src/modules/union_find.c \
 	src/modules/work_queue.c
 
 .PHONY: all clean
