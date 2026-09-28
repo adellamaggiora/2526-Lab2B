@@ -1,5 +1,7 @@
 # C Best Practices and Info
 
+- ricorda precondizioni e postcondizioni all'inizio e la fine delle funzioni con ```assert```
+
 - i nomi delle variabili e delle funzioni sono in formato ```snake_case```
 
 - le struct si mettono nel file .h
