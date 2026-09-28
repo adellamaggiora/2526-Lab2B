@@ -2,7 +2,7 @@
 #define MSF_H
 
 /*
-    valore del nodo non necessario;
+    id del nodo non necessario;
     biezione con l'indice dell'array
 */
 typedef struct uf_node
