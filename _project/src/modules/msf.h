@@ -2,11 +2,11 @@
 #define MSF_H
 
 /*
-    id del nodo non necessario;
-    biezione con l'indice dell'array
+    id in biezione con l'indice dell'array
 */
 typedef struct uf_node
 {
+    int id;
     int parent;
     int rank;
 } uf_node;

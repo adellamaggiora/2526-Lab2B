@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "msf.h"
+#include "parser.h"
 
 /**
  * Funzione principale (Entry point del programma)
@@ -9,7 +11,21 @@
  */
 int main(int argc, char *argv[]) {
     
-    // 1. Inizializzazione delle variabili
+    
+    if (argc != 2)
+    {
+        fprintf(stderr, "%s", "The program require a filepath argument \n");
+        return EXIT_FAILURE;
+    }
+
+
+    
+    uf_node *nodes = 
+
+    
+
+
+
     
     // 2. Logica del programma o chiamata a funzioni esterne
     printf("Hello, World!\n");

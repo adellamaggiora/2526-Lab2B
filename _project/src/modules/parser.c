@@ -41,21 +41,23 @@ uf_node **parse_input_file(char *filepath)
     char *line_type;
     int max_node_index, total_edges;
     arco **edges;
+    uf_node *nodes = NULL;
 
-    // lo spazio iniziale ignora tutti gli spazi, tab e newline finché non trovi un carattere vero.
+    // lo spazio iniziale ignora tutti gli spazi, tab e newline
+    // finché non viene trovato un carattere vero.
     while (fscanf(file, " %c", &line_type) == 1)
     {
         switch (*line_type)
         {
         case 'p':
-
+            // memorizzo i dati, verranno usati gli ultimi
+            // nel caso ci fosse la riga p multipla
             fscanf(file, " sp %d %d", &max_node_index, &total_edges);
-            
-
             break;
         case 'a':
-            int n, m;
-            fscanf(file, " a %d %d", &n, &m);
+            int u, v, w;
+            fscanf(file, " a %d %d", &u, &v, &w);
+
             break;
 
         default:
@@ -63,8 +65,21 @@ uf_node **parse_input_file(char *filepath)
         }
     }
 
-    // parsing...
+    int total_nodes = max_node_index + 1;
+    nodes = malloc(total_nodes * sizeof(uf_node));
+
+    for (size_t i = 0; i < (total_nodes); i++)
+    {
+        uf_node node = {
+            .id = i,
+            .parent = NULL, // occorre inizializzare al parent corretto o va bene NULL?
+            .rank = 0};
+        
+        nodes[i] = node;
+    }
+
+    
 
     fclose(file);
-    return NULL;
+    return nodes;
 }
