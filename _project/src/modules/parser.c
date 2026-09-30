@@ -28,7 +28,7 @@
     ******************************************
 */
 
-uf_node **parse_input_file(char *filepath)
+uf_node *parse_file(char *filepath)
 {
 
     FILE *file = fopen(filepath, "r");
@@ -57,9 +57,7 @@ uf_node **parse_input_file(char *filepath)
         case 'a':
             int u, v, w;
             fscanf(file, " a %d %d", &u, &v, &w);
-
             break;
-
         default:
             break;
         }

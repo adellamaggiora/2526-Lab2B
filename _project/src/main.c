@@ -9,24 +9,29 @@
  * @param argv Array di stringhe contenente gli argomenti
  * @return 0 in caso di successo, un valore diverso da 0 in caso di errore
  */
-int main(int argc, char *argv[]) {
-    
-    
+int main(int argc, char *argv[])
+{
+
     if (argc != 2)
     {
         fprintf(stderr, "%s", "The program require a filepath argument \n");
         return EXIT_FAILURE;
     }
 
+    char *filepath = argv[1];
 
-    
-    uf_node *nodes = 
+    uf_node *nodes = parse_file(filepath);
 
-    
+    for (int i = 0; i < 5; i++)
+    {
+        printf("id=%d parent=%d rank=%d\n",
+               nodes[i].id,
+               nodes[i].parent,
+               nodes[i].rank);
+    }
 
+    free(nodes);
 
-
-    
     // 2. Logica del programma o chiamata a funzioni esterne
     printf("Hello, World!\n");
 

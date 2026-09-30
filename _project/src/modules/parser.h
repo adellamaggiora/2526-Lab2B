@@ -1,5 +1,5 @@
-#ifndef MSF_H
-#define MSF_H
+#ifndef PARSER_H
+#define PARSER_H
 
 #include "msf.h"
 
@@ -10,7 +10,7 @@ typedef struct parsed_file
 
 
 
-uf_node **parse_file(char *filepath);
+uf_node *parse_file(char *filepath);
 
 
 #endif

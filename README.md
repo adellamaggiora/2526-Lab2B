@@ -42,7 +42,7 @@ gcc -g -Wall -Wextra -std=c11 -o <output-file> <input-file>.c
 Esempio:
 
 ```bash
-gcc -g -Wall -Wextra -std=c11 -o charstr charstr.c
+gcc -g -Wall -Wextra -std=c11 -o <output-file> <input-file>.c
 ```
 
 ## Guida al debugging
@@ -56,13 +56,13 @@ gcc -g -Wall -Wextra -std=gnu11 -o <output-file> <input-file>.c
 Poi si può avviare il debugger da terminale:
 
 ```bash
-gdb ./charstr
+gdb <compiled-file>
 ```
 
 Oppure dal browser con `gdbgui`:
 
 ```bash
-gdbgui -r --host 0.0.0.0 --port 5000 ./charstr
+gdbgui -r --host 0.0.0.0 --port 5000 <compiled-file>
 ```
 
 Dal browser aprire:
