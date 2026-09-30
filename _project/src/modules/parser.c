@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "msf.h"
 #include "graph.h"
 
 /*
@@ -28,7 +27,7 @@
     ******************************************
 */
 
-uf_node *parse_file(char *filepath)
+grafo *parse_file(char *filepath)
 {
 
     FILE *file = fopen(filepath, "r");
@@ -38,9 +37,7 @@ uf_node *parse_file(char *filepath)
         return NULL;
     }
 
-    // possibile problema di memoria (valgrind) identificatore non inizalizzato
     char line_type;
-    //
     int max_node_index, total_edges;
     arco **edges;
     uf_node *nodes = NULL;

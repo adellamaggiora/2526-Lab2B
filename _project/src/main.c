@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "msf.h"
 #include "parser.h"
+#include "graph.h"
 
 /**
  * Funzione principale (Entry point del programma)
@@ -19,18 +20,10 @@ int main(int argc, char *argv[])
     }
 
     char *filepath = argv[1];
+    grafo *graph = parse_file(filepath);
 
-    uf_node *nodes = parse_file(filepath);
 
-    for (int i = 0; i < 5; i++)
-    {
-        printf("id=%d parent=%d rank=%d\n",
-               nodes[i].id,
-               nodes[i].parent,
-               nodes[i].rank);
-    }
-
-    free(nodes);
+    free(graph);
 
     // 2. Logica del programma o chiamata a funzioni esterne
     printf("Hello, World!\n");

@@ -3,7 +3,19 @@
 
 #include <stdbool.h>
 
-/* strutture dati già fornite nel progetto */ 
+/* 
+    ***************************************
+    strutture dati già fornite nel progetto
+    ***************************************
+    
+    solo alcune prop verranno aggiunte da me
+    per convenzione userò nomi delle prop in inglese 
+
+    chiamare le prop in inglese mi aiuta anche a distinguere
+    a colpo d'occhio le proprietà "extra"
+    (ad eccezione di weight e next :( )
+
+*/ 
 
 // invariante: u < v
 typedef struct arco {
@@ -29,6 +41,18 @@ typedef struct {
     int *cCon;
     int numCoCo;
     long costoMSF;
+    /*
+        prop aggiunte dopo il parsing
+    */ 
+    // tot nodi
+    int node_count;
+    // tot archi
+    int edge_count;
+    // lunghezza array hash table
+    int bucket_count;
+    
+
+
 } grafo;
 
 /***********************************************/
