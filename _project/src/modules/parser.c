@@ -38,7 +38,9 @@ uf_node *parse_file(char *filepath)
         return NULL;
     }
 
-    char *line_type;
+    // possibile problema di memoria (valgrind) identificatore non inizalizzato
+    char line_type;
+    //
     int max_node_index, total_edges;
     arco **edges;
     uf_node *nodes = NULL;
@@ -47,7 +49,7 @@ uf_node *parse_file(char *filepath)
     // finché non viene trovato un carattere vero.
     while (fscanf(file, " %c", &line_type) == 1)
     {
-        switch (*line_type)
+        switch (line_type)
         {
         case 'p':
             // memorizzo i dati, verranno usati gli ultimi

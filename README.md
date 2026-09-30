@@ -65,8 +65,26 @@ Oppure dal browser con `gdbgui`:
 gdbgui -r --host 0.0.0.0 --port 5000 <compiled-file>
 ```
 
+Per passare argomenti al programma, ad esempio il percorso di un file di input, usare `--args` come ultima opzione:
+
+```bash
+gdbgui -r --host 0.0.0.0 --port 5000 --args ./<compiled-file> <input-file>
+```
+
+Tutto ciò che segue `--args` viene passato al programma da eseguire.
+
 Dal browser aprire:
 
 ```text
 http://localhost:5000
 ```
+
+## Controllo della memoria con Valgrind
+
+Compilare il programma con l'opzione `-g`, quindi eseguirlo con:
+
+```bash
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./<compiled-file> [argomenti]
+```
+
+Valgrind segnala accessi non validi alla memoria e blocchi allocati che non sono stati correttamente deallocati. Al termine dell'esecuzione verificare in particolare che non siano presenti errori e perdite indicate come `definitely lost`.
