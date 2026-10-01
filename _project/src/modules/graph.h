@@ -3,19 +3,20 @@
 
 #include <stdbool.h>
 
+
 /* 
     ***************************************
     strutture dati già fornite nel progetto
     ***************************************
     
-    solo alcune prop verranno aggiunte da me
+    solo alcune prop verranno aggiunte da me (extra)
     per convenzione userò nomi delle prop in inglese 
 
-    chiamare le prop in inglese mi aiuta anche a distinguere
-    a colpo d'occhio le proprietà "extra"
-    (ad eccezione di weight e next :( )
+    le prop weight e next erano le uniche prop
+    in inglese già presenti
+*/
 
-*/ 
+
 
 // invariante: u < v
 typedef struct arco {
@@ -26,7 +27,8 @@ typedef struct arco {
     struct arco *next;
 } arco;
 
-// nodo del grafo nelle liste di adiacenza della hash table
+
+// elemento di una lista di adiacenza, id rappresenta il nodo vicino
 typedef struct elemento {
     int id;
     int w;
@@ -34,23 +36,23 @@ typedef struct elemento {
     struct elemento *next;
 } elemento;
 
-// grafo
+
 typedef struct grafo {
     arco **gHash;
+    // questo array è indicizzato con l'id del nodo
     elemento **vicini;
     int *cCon;
     int numCoCo;
     long costoMSF;
+
     /*
-        prop aggiunte dopo il parsing
+        prop "extra" (aggiunte da me)
     */ 
     // tot nodi
     int node_count;
     // tot archi
     int edge_count;
 } grafo;
-
-/***********************************************/
 
 
 

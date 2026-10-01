@@ -1,5 +1,4 @@
 #include "hash.h"
-
 #include <math.h>
 #include <stdint.h>
 
@@ -21,3 +20,4 @@ int hash_edge(const arco *edge, int hash_table_length)
     size_t hash = edge->u * 31 + edge->v;
     return hash % hash_table_length;
 }
+
