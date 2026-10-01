@@ -48,8 +48,6 @@ typedef struct grafo {
     int node_count;
     // tot archi
     int edge_count;
-    // lunghezza array hash table
-    int bucket_count;
 } grafo;
 
 /***********************************************/
