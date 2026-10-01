@@ -41,6 +41,10 @@ typedef struct grafo {
     arco **gHash;
     // questo array è indicizzato con l'id del nodo
     elemento **vicini;
+    /*
+        cCon[i] contiene l'identificatore della componente connessa del nodo i-esimo
+        Tale id è il più piccolo dei nodi della componente
+    */
     int *cCon;
     int numCoCo;
     long costoMSF;
@@ -48,12 +52,12 @@ typedef struct grafo {
     /*
         prop "extra" (aggiunte da me)
     */ 
-    // tot nodi
     int node_count;
-    // tot archi
     int edge_count;
 } grafo;
 
+
+arco *build_edge(int u, int v, int w);
 
 
 #endif

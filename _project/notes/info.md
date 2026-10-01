@@ -30,6 +30,12 @@
 
 - Una funzione che ritorna una `struct` non può ritornare `NULL`; questo è un valore per puntatori, non per una `struct`.
 
+- 
+```c 
+int hash_edge(const arco *edge, int hash_table_length)
+```
+`const` Per dire che la funzione non deve modificare l’arco puntato da edge.
+
 - `char *[]` è equivalente a `char **`
 
 - `int` numero intero con segno `size_t` intero senza segno
