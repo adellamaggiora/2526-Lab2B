@@ -35,7 +35,7 @@ typedef struct elemento {
 } elemento;
 
 // grafo
-typedef struct {
+typedef struct grafo {
     arco **gHash;
     elemento **vicini;
     int *cCon;
@@ -50,9 +50,6 @@ typedef struct {
     int edge_count;
     // lunghezza array hash table
     int bucket_count;
-    
-
-
 } grafo;
 
 /***********************************************/

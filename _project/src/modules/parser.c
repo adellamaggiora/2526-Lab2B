@@ -38,9 +38,8 @@ grafo *parse_file(char *filepath)
     }
 
     char line_type;
-    int max_node_index, total_edges;
+    int node_count, edge_count;
     arco **edges;
-    uf_node *nodes = NULL;
 
     // lo spazio iniziale ignora tutti gli spazi, tab e newline
     // finché non viene trovato un carattere vero.
@@ -49,9 +48,8 @@ grafo *parse_file(char *filepath)
         switch (line_type)
         {
         case 'p':
-            // memorizzo i dati, verranno usati gli ultimi
-            // nel caso ci fosse la riga p multipla
-            fscanf(file, " sp %d %d", &max_node_index, &total_edges);
+            // leggo e memorizzo il numero dei nodi e degli archi
+            fscanf(file, " sp %d %d", &node_count, &edge_count);
             break;
         case 'a':
             int u, v, w;
@@ -62,21 +60,14 @@ grafo *parse_file(char *filepath)
         }
     }
 
-    int total_nodes = max_node_index + 1;
-    nodes = malloc(total_nodes * sizeof(uf_node));
-
-    for (size_t i = 0; i < (total_nodes); i++)
-    {
-        uf_node node = {
-            .id = i,
-            .parent = NULL, // occorre inizializzare al parent corretto o va bene NULL?
-            .rank = 0};
-        
-        nodes[i] = node;
-    }
-
+    grafo graph = {
+        .node_count = node_count,
+        .edge_count = edge_count
+    };
     
-
     fclose(file);
-    return nodes;
+
+
+
+    return &graph;
 }

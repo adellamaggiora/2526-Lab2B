@@ -1,5 +1,25 @@
 # C Best Practices and Info
 
+- oggetto che ritorna una `struct`
+    - Struct piccola/moderata e semplice da copiare → ritorna la struct per valore (e tale valore cessa di esistere fuori dallo scope di funzione del chiamante)
+    - Oggetto grande, condiviso, modificabile da più parti o allocato dinamicamente → ritorna un puntatore
+    - Mai ritornare il puntatore a una variabile locale (una variabiel che "vive" solo all'interno di una funzione)
+
+- differenza tra `.` (punto) e `->` (freccia) 
+    - . quando hai la struct
+    - -> quando hai un puntatore alla struct
+
+- struttura dati `union`
+    ```c
+    union Dato {
+        int i;
+        float f;
+        char c;
+    };
+    ```
+    Con una union i campi i, f e c occupano la stessa memoria.
+    La union avrà dimensione sufficiente a contenere il campo più grande (più eventuale padding).
+
 - ricorda precondizioni e postcondizioni all'inizio e la fine delle funzioni con `assert`
 
 - i nomi delle variabili e delle funzioni sono in formato `snake_case`
@@ -7,6 +27,8 @@
 - le struct si mettono nel file .h
 
 - non è necessario creare una cartella models contente le struct: si mettono direttamente nel modulo
+
+- Una funzione che ritorna una `struct` non può ritornare `NULL`; questo è un valore per puntatori, non per una `struct`.
 
 - `char *[]` è equivalente a `char **`
 
@@ -30,6 +52,17 @@ e restituisce l'errore al sistema operativo
 
     #endif
 ```
+
+- `enum` serve a rappresentare un insieme finito di valori simbolici leggibili; tutti i valori possibili sono identificati da costanti simboliche intere
+    ```c
+    enum Giorno {
+        LUNEDI,
+        MARTEDI,
+        MERCOLEDI,
+        GIOVEDI,
+        VENERDI
+    };
+    ```
 
 - per accedere ai campi di una struct si usa `->` quando si ha un puntatore a una struct, mentre si usa il `.` quando nella variabile c'è la struct stessa. `config_ptr->operator_name` equivale a `(*config_ptr).operator_name`
 

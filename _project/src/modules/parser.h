@@ -1,10 +1,10 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "msf.h"
+#include "graph.h"
 
 
-uf_node *parse_file(char *filepath);
+grafo *parse_file(char *filepath);
 
 
 #endif
