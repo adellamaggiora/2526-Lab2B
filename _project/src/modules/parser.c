@@ -3,7 +3,6 @@
 #include "graph.h"
 #include "hash.h"
 
-
 /*
     ******************************************
     parser dei file con formato .gr
@@ -29,8 +28,6 @@
     ******************************************
 */
 
-
-
 grafo *parse_file(char *filepath)
 {
 
@@ -42,18 +39,7 @@ grafo *parse_file(char *filepath)
     }
 
     char line_type;
-    int node_count, edge_count;
-    int table_length = hash_table_length(edge_count, 0.6);
-
-    grafo graph = {
-        .gHash = malloc(table_length * sizeof(arco)),
-        .vicini = NULL,
-        .cCon = NULL,
-        .numCoCo = 0,
-        .costoMSF = 0,
-        .node_count = node_count,
-        .edge_count = edge_count        
-    };
+    grafo *graph;
 
 
     // lo spazio iniziale ignora tutti gli spazi, tab e newline
@@ -63,23 +49,24 @@ grafo *parse_file(char *filepath)
         switch (line_type)
         {
         case 'p':
+            int node_count, edge_count;
             fscanf(file, " sp %d %d", &node_count, &edge_count);
+            int table_length = hash_table_length(edge_count, 0.6);
+            graph->node_count = node_count;
+            graph->edge_count = edge_count;
+            graph->gHash = calloc(table_length, sizeof(arco *));
             break;
         case 'a':
             int u, v, w;
             fscanf(file, " a %d %d", &u, &v, &w);
-            insert_edge_into_hash_table(u, v, w, graph.gHash, table_length);            
+            insert_edge_into_hash_table(u, v, w, graph->gHash, table_length);
             break;
         default:
             break;
         }
     }
 
-
-    
     fclose(file);
-
-
 
     return &graph;
 }
