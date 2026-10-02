@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
 
     char *filepath = argv[1];
     grafo *graph = parse_file(filepath);
+    
 
 
     free(graph);

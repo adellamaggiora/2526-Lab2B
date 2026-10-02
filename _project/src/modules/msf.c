@@ -2,8 +2,9 @@
 #include "msf.h";
 
 
-void kruskal(arco *archi, int num_archi, int num_nodi)
+void mst_kruskal(grafo *graph)
 {
+
     uf_node *uf = malloc(num_nodi * sizeof(*uf));
 
     for (int i = 0; i < num_nodi; i++) {
@@ -15,3 +16,6 @@ void kruskal(arco *archi, int num_archi, int num_nodi)
 
     free(uf);
 }
+
+
+// dentro la union find faccio il calcolo delle componenti connesse

@@ -43,7 +43,7 @@ typedef struct grafo {
     elemento **vicini;
     /*
         cCon[i] contiene l'identificatore della componente connessa del nodo i-esimo
-        Tale id è il più piccolo dei nodi della componente
+        L'identificatore di una comp. connessa è il più piccolo dei nodi della componente
     */
     int *cCon;
     int numCoCo;
