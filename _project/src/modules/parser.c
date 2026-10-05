@@ -39,7 +39,7 @@ grafo *parse_file(char *filepath)
     }
 
     char line_type;
-    grafo *graph;
+    grafo *graph = calloc(1, sizeof(*graph));
 
 
     // lo spazio iniziale ignora tutti gli spazi, tab e newline
@@ -68,5 +68,5 @@ grafo *parse_file(char *filepath)
 
     fclose(file);
 
-    return &graph;
+    return graph;
 }
