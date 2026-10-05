@@ -1,7 +1,9 @@
-#include "hash.h"
+#include <stddef.h>
 #include <math.h>
 #include <stdint.h>
 #include "graph.h"
+#include "hash.h"
+
 
 
 // private

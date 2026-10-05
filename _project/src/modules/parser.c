@@ -54,7 +54,7 @@ grafo *parse_file(char *filepath)
             int table_length = hash_table_length(edge_count, 0.6);
             graph->node_count = node_count;
             graph->edge_count = edge_count;
-            graph->gHash = calloc(table_length, sizeof(arco *));
+            graph->gHash = calloc(table_length, sizeof(arco));
             break;
         case 'a':
             int u, v, w;
