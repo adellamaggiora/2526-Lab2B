@@ -11,6 +11,7 @@ TARGET = build/main
 HEADERS = $(wildcard src/modules/*.h)
 
 SOURCES = src/main.c \
+	src/modules/error-manager.c \
 	src/modules/graph.c \
 	src/modules/hash.c \
 	src/modules/msf.c \

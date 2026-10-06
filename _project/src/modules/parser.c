@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "error-manager.h"
 #include "graph.h"
 #include "hash.h"
 
@@ -31,20 +32,14 @@
 grafo *parse_file(char *filepath)
 {
 
-    FILE *file = fopen(filepath, "r");
-    if (file == NULL)
-    {
-        perror("fopen");
-        return NULL;
-    }
+    FILE *file = checked_fopen(filepath, "r");
 
     char line_type;
-    grafo *graph = calloc(1, sizeof(*graph));
-
+    grafo *graph = checked_calloc(1, sizeof(*graph));
 
     // lo spazio iniziale ignora tutti gli spazi, tab e newline
     // finché non viene trovato un carattere vero.
-    while (fscanf(file, " %c", &line_type) == 1)
+    while (fscanf(file, "%c", &line_type) == 1)
     {
         switch (line_type)
         {
@@ -54,14 +49,18 @@ grafo *parse_file(char *filepath)
             int table_length = hash_table_length(edge_count, 0.6);
             graph->node_count = node_count;
             graph->edge_count = edge_count;
-            graph->gHash = calloc(table_length, sizeof(arco));
+            graph->gHash = checked_calloc(table_length, sizeof(*graph->gHash));
             break;
         case 'a':
             int u, v, w;
-            fscanf(file, " a %d %d", &u, &v, &w);
+            fscanf(file, " %d %d %d", &u, &v, &w);
             insert_edge_into_hash_table(u, v, w, graph->gHash, table_length);
             break;
         default:
+            int ch;
+            // faccio la get char finchè non cosnumo la linea (termina con \n)
+            // oppure la fine del file EOF
+            while ((ch = fgetc(file)) != '\n' && ch != EOF);
             break;
         }
     }

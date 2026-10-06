@@ -1,5 +1,5 @@
 #include "graph.h"
-#include <stdlib.h>
+#include "error-manager.h"
 
 /*
     questa funzione ritorna un valore, non un puntatore
@@ -19,7 +19,7 @@ arco build_edge(int u, int v, int w)
 
 arco *build_edge(int u, int v, int w)
 {
-    arco *result = malloc(sizeof(arco));
+    arco *result = checked_malloc(sizeof(*result));
 
     result->u = u;
     result->v = v;
