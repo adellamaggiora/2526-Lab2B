@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "error-manager.h"
 #include "graph.h"
 #include "hash.h"
@@ -29,11 +30,9 @@
     ******************************************
 */
 
-grafo *parse_file(char *filepath)
+grafo *parse_file(FILE *file)
 {
-
-    FILE *file = checked_fopen(filepath, "r");
-
+    assert(file != NULL);
     char line_type;
     grafo *graph = checked_calloc(1, sizeof(*graph));
 
@@ -64,8 +63,6 @@ grafo *parse_file(char *filepath)
             break;
         }
     }
-
-    fclose(file);
 
     return graph;
 }

@@ -3,6 +3,7 @@
 #include "msf.h"
 #include "parser.h"
 #include "graph.h"
+#include "error-manager.h"
 
 /**
  * Funzione principale (Entry point del programma)
@@ -20,7 +21,9 @@ int main(int argc, char *argv[])
     }
 
     char *filepath = argv[1];
-    grafo *graph = parse_file(filepath);
+    FILE *file = checked_fopen(filepath, "r");
+    grafo *graph = parse_file(file);
+    fclose(file);
     
 
 
