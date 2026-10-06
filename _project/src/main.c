@@ -4,6 +4,7 @@
 #include "parser.h"
 #include "graph.h"
 #include "error-manager.h"
+#include "debug.h"
 
 
 
@@ -18,16 +19,10 @@ int main(int argc, char *argv[])
     FILE *file = checked_fopen(filepath, "r");
     grafo *graph = parse_file(file);
     fclose(file);
-    
-
-
+    debug_print_hash_table(graph->gHash, graph->gHash_length);
     free(graph);
 
-    // 2. Logica del programma o chiamata a funzioni esterne
-    printf("Hello, World!\n");
 
-    // 3. Pulizia della memoria (se applicabile)
-
-    // Ritorna un codice di successo al sistema operativo
-    return EXIT_SUCCESS; // Equivalente a 'return 0;'
+    // equivale a return 0
+    return EXIT_SUCCESS; 
 }

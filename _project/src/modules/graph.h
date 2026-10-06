@@ -54,6 +54,7 @@ typedef struct grafo {
     */ 
     int node_count;
     int edge_count;
+    int gHash_length;
 } grafo;
 
 

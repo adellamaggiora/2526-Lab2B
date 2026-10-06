@@ -34,7 +34,6 @@ grafo *parse_file(FILE *file)
 {
     assert(file != NULL);
     char line_type;
-    int table_length;
     grafo *graph = checked_calloc(1, sizeof(*graph));
 
     // lo spazio iniziale ignora tutti gli spazi, tab e newline
@@ -47,16 +46,17 @@ grafo *parse_file(FILE *file)
             int node_count, edge_count;
             if (fscanf(file, " sp %d %d", &node_count, &edge_count) != 2)
                 terminate("Invalid graph header");
-            table_length = hash_table_length(edge_count, 0.6);
+            graph->gHash_length = hash_table_length(edge_count, 0.6);
             graph->node_count = node_count;
             graph->edge_count = edge_count;
-            graph->gHash = checked_calloc(table_length, sizeof(arco *));
+            graph->gHash = checked_calloc(graph->gHash_length, sizeof(arco *));
+            
             break;
         case 'a':
             int u, v, w;
             if (fscanf(file, " %d %d %d", &u, &v, &w) != 3)
                 terminate("Invalid edge");
-            insert_edge_into_hash_table(u, v, w, graph->gHash, table_length);
+            insert_edge_into_hash_table(u, v, w, graph->gHash, graph->gHash_length);
             break;
         default:
             int ch;

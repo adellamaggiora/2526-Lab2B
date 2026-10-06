@@ -14,6 +14,7 @@ SOURCES = src/main.c \
 	src/modules/error-manager.c \
 	src/modules/graph.c \
 	src/modules/hash.c \
+	src/modules/debug.c \
 	src/modules/msf.c \
 	src/modules/parser.c \
 
