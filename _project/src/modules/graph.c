@@ -19,7 +19,7 @@ arco build_edge(int u, int v, int w)
 
 arco *build_edge(int u, int v, int w)
 {
-    arco *result = checked_malloc(sizeof(*result));
+    arco *result = checked_malloc(sizeof(arco));
 
     result->u = u;
     result->v = v;

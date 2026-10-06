@@ -30,8 +30,8 @@ int hash_table_length(int edge_count, double load_factor)
     return (int)hash_table_length;
 }
 
-int insert_edge_into_hash_table(int u, int v, int w, arco **hash_table, int hash_table_length) {
-    int edge_index = edge_hash_index(u, v, w);
+void insert_edge_into_hash_table(int u, int v, int w, arco **hash_table, int hash_table_length) {
+    int edge_index = edge_hash_index(u, v, hash_table_length);
     arco *new_edge = build_edge(u, v, w);
     arco *existing_edge = hash_table[edge_index];
     if (existing_edge == NULL)
@@ -42,9 +42,9 @@ int insert_edge_into_hash_table(int u, int v, int w, arco **hash_table, int hash
     {
         while (existing_edge->next != NULL)
         {
-            // scorrimento della lista di adiacenza
+            // scorrimento della lista concatenata
             existing_edge = existing_edge->next;
         }
-        hash_table[edge_index] = new_edge;
+        existing_edge->next = new_edge;
     }    
 }

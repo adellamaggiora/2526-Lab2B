@@ -5,19 +5,13 @@
 #include "graph.h"
 #include "error-manager.h"
 
-/**
- * Funzione principale (Entry point del programma)
- * @param argc Numero di argomenti passati da riga di comando
- * @param argv Array di stringhe contenente gli argomenti
- * @return 0 in caso di successo, un valore diverso da 0 in caso di errore
- */
+
+
 int main(int argc, char *argv[])
 {
 
-    if (argc != 2)
-    {
-        fprintf(stderr, "%s", "The program require a filepath argument \n");
-        return EXIT_FAILURE;
+    if (argc != 2) {
+        terminate("The program require a filepath argument");
     }
 
     char *filepath = argv[1];
