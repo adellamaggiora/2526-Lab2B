@@ -4,6 +4,17 @@
 #include "error-manager.h"
 #include <stdlib.h>
 
+
+
+void sort_graph_edges_by_weight(grafo *graph)
+{
+
+}
+
+
+
+// il grafo al termine di questo algoritmo dovrà avere l'insieme degli archi (già popolato nel parser dentro "gHash")
+// le liste di adiacenza dei singoli nodi (tabella "vicini"), le componenti connesse (array cCon).
 void mst_kruskal(grafo *graph)
 {
 
