@@ -47,7 +47,7 @@ grafo *parse_file(FILE *file)
             if (fscanf(file, " sp %d %d", &node_count, &edge_count) != 2)
                 terminate("Invalid graph header");
             graph->gHash_length = hash_table_length(edge_count, 0.6);
-            graph->node_count = node_count;
+            graph->node_count = node_count + 1;
             graph->edge_count = edge_count;
             graph->gHash = checked_calloc(graph->gHash_length, sizeof(arco *));
             

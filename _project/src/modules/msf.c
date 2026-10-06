@@ -18,6 +18,8 @@ void sort_graph_edges_by_weight(grafo *graph)
 void mst_kruskal(grafo *graph)
 {
 
+    // se 3 componenti conness
+
     uf_node *uf = checked_malloc(graph->node_count * sizeof(*uf));
 
     for (int i = 0; i < graph->node_count; i++) {
