@@ -15,7 +15,6 @@ int edge_hash_index(int u, int v, int hash_table_length)
     return hash % hash_table_length;
 }
 
-
 // public
 
 int hash_table_length(int edge_count, double load_factor)

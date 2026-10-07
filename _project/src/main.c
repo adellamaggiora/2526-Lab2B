@@ -16,11 +16,13 @@ int main(int argc, char *argv[])
     }
 
     char *filepath = argv[1];
+    
     FILE *file = checked_fopen(filepath, "r");
     grafo *graph = parse_file(file);
     fclose(file);
+
     debug_print_hash_table(graph->gHash, graph->gHash_length);
-    // mst_kruskal(graph);
+    mst_kruskal(graph);
 
 
     free_graph(graph);

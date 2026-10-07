@@ -5,4 +5,6 @@
 
 void debug_print_hash_table(arco **hash_table, int table_length);
 
+void debug_print_edge(arco *edge);
+
 #endif

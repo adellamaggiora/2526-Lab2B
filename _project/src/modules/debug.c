@@ -8,15 +8,19 @@ void debug_print_hash_table(arco **hash_table, int table_length)
         arco *edge = hash_table[i];
         printf("gHash[%d]:", i);
 
-
         while (edge != NULL)
         {
-            printf(" -> (u %d, v %d, w %d, msf %s)",
-                   edge->u, edge->v, edge->weight,
-                   edge->msf ? "true" : "false");
+            debug_print_edge(edge);
             edge = edge->next;
         }
 
-        putchar('\n');
+        printf("\n");
     }
+}
+
+void debug_print_edge(arco *edge)
+{
+    printf("->(u %d, v %d, w %d, msf %s)",
+           edge->u, edge->v, edge->weight,
+           edge->msf ? "true" : "false");
 }

@@ -172,6 +172,8 @@ e restituisce l'errore al sistema operativo
 
 - C non ha eccezioni, quindi la gestione degli errori è soprattutto una combinazione di segnalazione, propagazione e decisione su cosa fare dopo
 
+- `const` scritto in un parametro di una funzione significa che tale funzione promette di non modificare il dato puntato
+
 ## Gestione della memoria e allocazione dinamica
 
 - paradigmi per la gestione della memoria
@@ -199,6 +201,16 @@ a compile-time. Il compilatore richiede una dimensione nota a tempo di compilazi
     - `realloc`: serve a modificare la dimensione di un blocco di memoria precedentemente allocato con `malloc` o `calloc`.
 
 - `struct` Una struttura è un contenitore che raggruppa più variabili sotto un unico nome, quindi è un blocco di memoria che contiene tutti i suoi campi. I suoi campi possono essere dei valori oppure dei puntatori.
+ad esempio
+    ```c
+        struct Persona {
+            int eta;
+            char sesso;
+        };
+
+        struct Persona p;
+    ```
+    `p` è una variabile che occupa un unico blocco di memoria che contiene i campi della `struct` in ordine, in questo caso un `int` e un ``char`
 
 - un array è un blocco di elementi consecutivi `int a[3] = {10, 20, 30}`. Il nome `a`, nella maggior parte delle espressioni, viene convertito nell'indirizzo del primo elemento: `&a[0]`. Con `malloc`, invece si ottiene sempre un puntatore a un blocco di memoria allocato dinamicamente, in questo caso non è possibile conoscerne la lunghezza.
 
