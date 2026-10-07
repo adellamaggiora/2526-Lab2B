@@ -18,18 +18,26 @@ void sort_graph_edges_by_weight(grafo *graph)
 void mst_kruskal(grafo *graph)
 {
 
-    // se 3 componenti conness
 
-    uf_node *uf = checked_malloc(graph->node_count * sizeof(*uf));
+    // devo raccogliere tutti i puntatori di tutti gli archi
 
-    for (int i = 0; i < graph->node_count; i++) {
-        uf[i].parent = i;
-        uf[i].rank = 0;
+    arco *edge_list = checked_calloc(graph->edge_count, sizeof(arco));
+    int edge_idx = 0;
+
+    for (size_t i = 0; i < graph->gHash_length; i++)
+    {
+        // arco edge* = graph->gHash[i];
+        // while (edge != NULL)
+        // {
+        //     edge_list[edge_idx] = edge;    
+        //     edge = edge + sizeof(arco);
+        //     edge_idx ++;    
+        // }
+        
     }
 
-    // usa uf in Kruskal
-
-    free(uf);
+    free(edge_list);
+    
 }
 
 

@@ -20,8 +20,10 @@ int main(int argc, char *argv[])
     grafo *graph = parse_file(file);
     fclose(file);
     debug_print_hash_table(graph->gHash, graph->gHash_length);
-    free(graph);
+    // mst_kruskal(graph);
 
+
+    free_graph(graph);
 
     // equivale a return 0
     return EXIT_SUCCESS; 

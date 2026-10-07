@@ -9,11 +9,11 @@
     strutture dati già fornite nel progetto
     ***************************************
     
-    solo alcune prop verranno aggiunte da me (extra)
-    per convenzione userò nomi delle prop in inglese 
+    solo alcune prop sono aggiunte da me (extra)
+    uso nomi delle prop in inglese 
 
-    le prop weight e next erano le uniche prop
-    in inglese già presenti
+    ad eccezione di "weight", "next" e "msf" 
+    erano le uniche prop già presenti in inglese
 */
 
 
@@ -59,6 +59,8 @@ typedef struct grafo {
 
 
 arco *build_edge(int u, int v, int w);
+
+void free_graph(grafo *graph);
 
 
 #endif

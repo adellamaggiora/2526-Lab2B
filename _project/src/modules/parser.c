@@ -60,7 +60,7 @@ grafo *parse_file(FILE *file)
             break;
         default:
             int ch;
-            // faccio la get char finchè non cosnumo la linea (termina con \n)
+            // leggo un char alla volta finchè non cosnumo la linea (termina con \n)
             // oppure la fine del file EOF
             while ((ch = fgetc(file)) != '\n' && ch != EOF);
             break;

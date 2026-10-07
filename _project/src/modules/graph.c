@@ -32,3 +32,20 @@ arco *build_edge(int u, int v, int w)
 
     return result;
 }
+
+void free_graph(grafo *graph)
+{
+    for (size_t i = 0; i < graph->gHash_length; i++)
+    {
+        arco *edge = graph->gHash[i];
+        while (edge != NULL)
+        {
+            arco *next = edge->next;
+            free(edge);
+            edge = next;
+        }
+    }
+
+    free(graph->gHash);
+    free(graph);
+}

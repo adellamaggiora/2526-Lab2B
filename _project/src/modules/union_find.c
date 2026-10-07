@@ -1,8 +1,11 @@
 #include "union_find.h"
 #include "error-manager.h"
+#include <assert.h>
 
 uf_node *make_set(int x)
 {
+    assert(x >= 0);
+
     uf_node *result = checked_malloc(sizeof(uf_node));
     result->id = x;
     result->rank = 0;
@@ -13,8 +16,15 @@ uf_node *make_set(int x)
 
 uf_node *find_set(uf_node *x)
 {
+    assert(x != NULL);
+    assert(x->id >= 0);
+    assert(x->rank >= 0);
+
     if (x->parent == NULL)
         return x;
+
+    assert(x->parent != x);
+    assert(x->parent->rank > x->rank);
 
     // (path compression) collega direttamente x alla radice del suo insieme
     x->parent = find_set(x->parent);
@@ -23,6 +33,9 @@ uf_node *find_set(uf_node *x)
 
 uf_node *union_set(uf_node *x, uf_node *y)
 {
+    assert(x != NULL);
+    assert(y != NULL);
+
     uf_node *set_x = find_set(x);
     uf_node *set_y = find_set(y);
 
