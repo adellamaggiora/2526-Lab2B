@@ -9,7 +9,7 @@ typedef struct uf_node
 } uf_node;
 
 
-uf_node *make_set(int x);
+void make_set(uf_node *node, int x);
 uf_node *find_set(uf_node *x);
 uf_node *union_set(uf_node *x, uf_node *y);
 

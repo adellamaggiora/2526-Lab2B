@@ -2,16 +2,16 @@
 #include "error-manager.h"
 #include <assert.h>
 
-uf_node *make_set(int x)
+
+// evito di allocare memoria dinamica
+void make_set(uf_node *node, int x)
 {
+    assert(node != NULL);
     assert(x >= 0);
 
-    uf_node *result = checked_malloc(sizeof(uf_node));
-    result->id = x;
-    result->rank = 0;
-    // nodo radice
-    result->parent = NULL;
-    return result;
+    node->id = x;
+    node->rank = 0;
+    node->parent = NULL;
 }
 
 uf_node *find_set(uf_node *x)

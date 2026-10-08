@@ -173,6 +173,18 @@ e restituisce l'errore al sistema operativo
 
 - `const` scritto in un parametro di una funzione significa che tale funzione promette di non modificare il dato puntato
 
+- l’aritmetica dei puntatori è definita in unità di elementi del tipo puntato. Ad esempio
+    ```c
+    int *p;
+    p + 1
+    ```
+    avanza di un totale di byte dato da:
+
+    ```c
+    sizeof(int)
+    ```
+
+
 ## Gestione della memoria e allocazione dinamica
 
 - paradigmi per la gestione della memoria
@@ -183,7 +195,7 @@ e restituisce l'errore al sistema operativo
     - **Transferred ownership**: la proprietà passa da una funzione/oggetto a un altro; il vecchio proprietario non deve più liberarla.
     - **Shared ownership**: più parti usano la stessa memoria; in C va gestito manualmente, spesso con reference counting.
     - **Static/global lifetime**: memoria statica o globale; non si libera con `free`.
-    - **Stack ownership**: variabili locali automatiche; vengono distrutte automaticamente uscendo dallo scope.
+    - **Stack ownership**: variabili locali automatiche; vengono distrutte automaticamente uscendo dallo scope
 
 - il seguente codice dà un errore perchè total_nodes viene calcolato a run-time e non
 a compile-time. Il compilatore richiede una dimensione nota a tempo di compilazione
@@ -192,7 +204,7 @@ a compile-time. Il compilatore richiede una dimensione nota a tempo di compilazi
     struct uf_node nodes[total_nodes];
 ```
 
-- la memoria va liberata con l'utilizzo di `free()` solo per la memoria ottenuta con `malloc`, `calloc` o `realloc`. 
+- la memoria va liberata con l'utilizzo di `free()` solo per la memoria ottenuta con `malloc`, `calloc` o `realloc`
 
 - operatori per l'allocazione di memoria
     - `malloc`: alloca un blocco di memoria senza pulirlo
@@ -211,9 +223,15 @@ ad esempio
     ```
     `p` è una variabile che occupa un unico blocco di memoria che contiene i campi della `struct` in ordine, in questo caso un `int` e un ``char`
 
-- un array è un blocco di elementi consecutivi `int a[3] = {10, 20, 30}`. Il nome `a`, nella maggior parte delle espressioni, viene convertito nell'indirizzo del primo elemento: `&a[0]`. Con `malloc`, invece si ottiene sempre un puntatore a un blocco di memoria allocato dinamicamente, in questo caso non è possibile conoscerne la lunghezza.
+- un array è un blocco di elementi consecutivi `int a[3] = {10, 20, 30}`. Il nome `a`, nella maggior parte delle espressioni, viene convertito nell'indirizzo del primo elemento: `&a[0]`. Con `malloc`, invece si ottiene sempre un puntatore a un blocco di memoria allocato dinamicamente, in questo caso non è possibile conoscerne la lunghezza
 
-- array vs puntatore: ad esempio `arco *edge_list` è un puntatore a un arco, quindi serve memoria per un solo indirizzo, mentre `arco edge_list[10]` serve memoria per 10 `struct` di tipo `arco`. Un array quando viene passato a una funzione "decade" a puntatore, ovvero viene passato l'indirizzo del primo elemento.
+- array vs puntatore: ad esempio `arco *edge_list` è un puntatore a un arco, quindi serve memoria per un solo indirizzo, mentre `arco edge_list[10]` serve memoria per 10 `struct` di tipo `arco`. Un array quando viene passato a una funzione "decade" a puntatore, ovvero viene passato l'indirizzo del primo elemento
+
+- con il passaggio per valore a una funzione viene creata una copia lcoale della struct, tipicamente nello stacj frame della funzione, quindi quella copia cessa di esistere quando la funzione termina.
+    Quindi il vantaggio del puntatore è soprattutto:
+    - evitare la copia;
+    - passare solo un indirizzo;
+    - poter lavorare sull’oggetto originale.
 
 
 ## Gestione errori in C
