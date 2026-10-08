@@ -16,6 +16,7 @@ SOURCES = src/main.c \
 	src/modules/hash.c \
 	src/modules/debug.c \
 	src/modules/msf.c \
+	src/modules/union_find.c \
 	src/modules/parser.c \
 
 .PHONY: all clean

@@ -52,7 +52,7 @@ void sort_edge_list_by_weight(arco *edge_list, int list_length)
     qsort(edge_list, list_length, sizeof(arco), &compare_edges);
 }
 
-// vuole una lista vuota già allocata in memoria
+// prende tutti gli archi della hash table e li mette in una lista passata come parametro
 void fill_edge_list(grafo *graph, arco *empty_edge_list)
 {
     size_t edge_idx = 0;

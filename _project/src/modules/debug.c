@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "debug.h"
+#include "union_find.h"
 
 void debug_print_hash_table(arco **hash_table, int table_length)
 {
@@ -21,6 +22,15 @@ void debug_print_edge(arco *edge)
     printf("->(u %d, v %d, w %d, msf %s)",
            edge->u, edge->v, edge->weight,
            edge->msf ? "true" : "false");
+    printf("\n");
+}
+
+void debug_print_uf_node(uf_node *node)
+{
+    printf("->(id %d, rank %d, parent_id %d)",
+           node->id,
+           node->rank,
+           node->parent ? node->parent->id : -1);
     printf("\n");
 }
 
