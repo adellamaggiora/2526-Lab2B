@@ -62,5 +62,8 @@ arco *build_edge(int u, int v, int w);
 
 void free_graph(grafo *graph);
 
+void sort_edge_list_by_weight(arco *edge_list, int list_length);
+
+void fill_edge_list(grafo *graph, arco *empty_edge_list);
 
 #endif

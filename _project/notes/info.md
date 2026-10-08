@@ -30,7 +30,6 @@
 
 - Una funzione che ritorna una `struct` non può ritornare `NULL`; questo è un valore per puntatori, non per una `struct`.
 
-- 
 ```c 
 int hash_edge(const arco *edge, int hash_table_length)
 ```
@@ -213,6 +212,8 @@ ad esempio
     `p` è una variabile che occupa un unico blocco di memoria che contiene i campi della `struct` in ordine, in questo caso un `int` e un ``char`
 
 - un array è un blocco di elementi consecutivi `int a[3] = {10, 20, 30}`. Il nome `a`, nella maggior parte delle espressioni, viene convertito nell'indirizzo del primo elemento: `&a[0]`. Con `malloc`, invece si ottiene sempre un puntatore a un blocco di memoria allocato dinamicamente, in questo caso non è possibile conoscerne la lunghezza.
+
+- array vs puntatore: ad esempio `arco *edge_list` è un puntatore a un arco, quindi serve memoria per un solo indirizzo, mentre `arco edge_list[10]` serve memoria per 10 `struct` di tipo `arco`. Un array quando viene passato a una funzione "decade" a puntatore, ovvero viene passato l'indirizzo del primo elemento.
 
 
 ## Gestione errori in C
