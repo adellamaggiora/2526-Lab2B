@@ -171,7 +171,7 @@ e restituisce l'errore al sistema operativo
 
 - C non ha eccezioni, quindi la gestione degli errori è soprattutto una combinazione di segnalazione, propagazione e decisione su cosa fare dopo
 
-- `const` scritto in un parametro di una funzione significa che tale funzione promette di non modificare il dato puntato
+- `const` scritto in un parametro di una funzione significa che tale funzione promette di non modificare il dato puntato, è proprio imposto dal compilatore, non solo un contratto
 
 - l’aritmetica dei puntatori è definita in unità di elementi del tipo puntato. Ad esempio
     ```c
@@ -234,6 +234,10 @@ ad esempio
     - poter lavorare sull’oggetto originale.
 
 - Assegnare una `struct` per valore crea una copia indipendente dei suoi campi, ma gli eventuali puntatori copiati continuano a riferirsi agli stessi oggetti originali (shallow copy).
+
+- `segmentation fault` significa che sto provando ad accedere a una zona di memoria che non fa parte del mio programma
+
+- Dereferenziare un array di puntatori (*array) restituisce il primo puntatore contenuto; dereferenziarlo nuovamente (**array) permette di accedere all’oggetto puntato.
 
 
 ## Gestione errori in C

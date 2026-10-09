@@ -3,15 +3,14 @@
 #include <assert.h>
 #include <stdlib.h>
 
-// private 
+// private
 
 int compare_edges(const void *x, const void *y)
 {
-    const arco e1 = *(const arco*)x;
-    const arco e2 = *(const arco*)y;
+    const arco e1 = *(const arco *)x;
+    const arco e2 = *(const arco *)y;
     return e1.weight - e2.weight;
 }
-
 
 // public
 
@@ -47,14 +46,15 @@ void free_graph(grafo *graph)
     free(graph);
 }
 
-void sort_edge_list_by_weight(arco *edge_list, int list_length)
+void sort_edge_pointers_list_by_weight(arco **edge_pointers_list, int list_length)
 {
-    qsort(edge_list, list_length, sizeof(arco), &compare_edges);
+
+    qsort(edge_pointers_list, list_length, sizeof(arco *), &compare_edges);
 }
 
-// prende tutti gli archi della hash table e li mette in una lista passata come parametro
-void fill_edge_list(grafo *graph, arco *empty_edge_list)
+arco **get_edge_pointers_list(grafo *graph)
 {
+    arco **list = checked_malloc(graph->edge_count * sizeof(arco *));
     size_t edge_idx = 0;
 
     for (size_t i = 0; i < graph->gHash_length; i++)
@@ -62,10 +62,11 @@ void fill_edge_list(grafo *graph, arco *empty_edge_list)
         arco *edge = graph->gHash[i];
         while (edge != NULL)
         {
-            // assegnazione per valore (è una copia della strcut)
-            empty_edge_list[edge_idx] = *edge;
+            list[edge_idx] = edge;
             edge_idx++;
             edge = edge->next;
         }
     }
+
+    return list;
 }

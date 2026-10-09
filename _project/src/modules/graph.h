@@ -60,10 +60,10 @@ typedef struct grafo {
 
 arco *build_edge(int u, int v, int w);
 
+arco **get_edge_pointers_list(grafo *graph);
+
 void free_graph(grafo *graph);
 
-void sort_edge_list_by_weight(arco *edge_list, int list_length);
-
-void fill_edge_list(grafo *graph, arco *empty_edge_list);
+void sort_edge_pointers_list_by_weight(arco **edge_pointers_list, int list_length);
 
 #endif
