@@ -7,6 +7,18 @@
 #include <assert.h>
 #include "graph.h"
 
+
+/**
+ * **************************************************************
+ * nota che 2 componenti connesse non possono condividere nodi
+ * due archi con gli stessi estremi (u,v) non possono appartenere 
+ * a componenti connesse distinte
+ * 
+ * **************************************************************
+ */
+
+
+
 // il grafo al termine di questo algoritmo dovrà avere l'insieme degli archi (già popolato nel parser dentro "gHash")
 // le liste di adiacenza dei singoli nodi (tabella "vicini"), le componenti connesse (array cCon).
 void mst_kruskal(grafo *graph)

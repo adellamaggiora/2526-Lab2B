@@ -233,6 +233,8 @@ ad esempio
     - passare solo un indirizzo;
     - poter lavorare sull’oggetto originale.
 
+- Assegnare una `struct` per valore crea una copia indipendente dei suoi campi, ma gli eventuali puntatori copiati continuano a riferirsi agli stessi oggetti originali (shallow copy).
+
 
 ## Gestione errori in C
 
