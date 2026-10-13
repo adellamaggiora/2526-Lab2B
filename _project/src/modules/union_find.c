@@ -3,7 +3,7 @@
 #include <assert.h>
 
 /*
-    I nodi del grafo sono contenuti in un insieme   che è
+    I nodi del grafo sono contenuti in un insieme che è
     implementato con un albero. Tale insieme serve a Kruskal
     per verificare se due nodi u, v di un arco appartengo
     allo stesso insieme, quindi alla stessa componente connessa
