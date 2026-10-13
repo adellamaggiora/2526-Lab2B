@@ -7,8 +7,7 @@ void debug_print_hash_table(arco **hash_table, int table_length)
     for (int i = 0; i < table_length; i++)
     {
         arco *edge = hash_table[i];
-        printf("gHash[%d]:", i);
-        printf("\n");
+        fprintf(stderr, "gHash[%d]:\n", i);
         while (edge != NULL)
         {
             debug_print_edge(edge);
@@ -19,19 +18,17 @@ void debug_print_hash_table(arco **hash_table, int table_length)
 
 void debug_print_edge(arco *edge)
 {
-    printf("->(u %d, v %d, w %d, msf %s)",
-           edge->u, edge->v, edge->weight,
-           edge->msf ? "true" : "false");
-    printf("\n");
+    fprintf(stderr, "->(u %d, v %d, w %d, msf %s)\n",
+            edge->u, edge->v, edge->weight,
+            edge->msf ? "true" : "false");
 }
 
 void debug_print_uf_node(uf_node *node)
 {
-    printf("->(id %d, rank %d, parent_id %d)",
-           node->id,
-           node->rank,
-           node->parent ? node->parent->id : -1);
-    printf("\n");
+    fprintf(stderr, "->(id %d, rank %d, parent_id %d)\n",
+            node->id,
+            node->rank,
+            node->parent ? node->parent->id : -1);
 }
 
 // prende una funzione come parametro
