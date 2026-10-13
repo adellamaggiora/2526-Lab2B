@@ -8,7 +8,7 @@
 
 // private
 
-int edge_hash_index(int u, int v, int hash_table_length)
+static int edge_hash_index(int u, int v, int hash_table_length)
 {
     // 31 numero primo
     size_t hash = u * 31 + v;
