@@ -3,9 +3,13 @@
 #include <assert.h>
 #include <stdlib.h>
 
-// private
+/*
+*******
+private
+*******
+*/
 
-int compare_edges(const void *x, const void *y)
+static int compare_edges(const void *x, const void *y)
 {
     // arrivano puntatori a puntatori (invocazione da compare_edges)
     arco *e1 = *(arco **)x;
@@ -15,7 +19,37 @@ int compare_edges(const void *x, const void *y)
            (e1->weight < e2->weight);
 }
 
-// public
+// passo riferimento alla testa per poterla modificare
+static void insert_vicino_sorted_by_id(
+    elemento **head,
+    int id,
+    int weight,
+    bool msf)
+{
+    assert(head != NULL);
+
+    elemento *new_element = checked_malloc(sizeof(*new_element));
+    new_element->id = id;
+    new_element->w = weight;
+    new_element->msf = msf;
+    new_element->next = NULL;
+
+    // inserisco prima del primo vicino con id >= id.
+    while (*head != NULL && (*head)->id < id)
+    {
+        head = &((*head)->next);
+    }
+
+    new_element->next = *head;
+    *head = new_element;
+}
+
+
+/*
+*******
+public
+*******
+*/
 
 arco *build_edge(int u, int v, int w)
 {
@@ -45,7 +79,24 @@ void free_graph(grafo *graph)
         }
     }
 
+    if (graph->vicini != NULL)
+    {
+        for (int i = 0; i < graph->node_count; i++)
+        {
+            elemento *current = graph->vicini[i];
+
+            while (current != NULL)
+            {
+                elemento *next = current->next;
+                free(current);
+                current = next;
+            }
+        }
+    }
+
     free(graph->gHash);
+    free(graph->vicini);
+    free(graph->cCon);
     free(graph);
 }
 
@@ -73,4 +124,23 @@ arco **get_edge_pointers_list(grafo *graph)
     }
 
     return list;
+}
+
+void add_vicini(grafo *graph, const arco *edge)
+{
+    assert(graph != NULL);
+    assert(graph->vicini != NULL);
+    assert(edge != NULL);
+
+    insert_vicino_sorted_by_id(
+        &graph->vicini[edge->u],
+        edge->v,
+        edge->weight,
+        edge->msf);
+
+    insert_vicino_sorted_by_id(
+        &graph->vicini[edge->v],
+        edge->u,
+        edge->weight,
+        edge->msf);
 }

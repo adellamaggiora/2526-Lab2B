@@ -33,6 +33,7 @@ void make_set(uf_node *node, int x)
     assert(x >= 0);
 
     node->id = x;
+    node->min_id = x;
     node->rank = 0;
     node->parent = NULL;
 }
@@ -68,6 +69,16 @@ uf_node *union_set(uf_node *x, uf_node *y)
     }
 
     uf_node *set;
+    int min_id;
+
+    if (set_x->min_id < set_y->min_id)
+    {
+        min_id = set_x->min_id;
+    }
+    else
+    {
+        min_id = set_y->min_id;
+    }
 
     if (set_x->rank > set_y->rank)
     {
@@ -86,6 +97,8 @@ uf_node *union_set(uf_node *x, uf_node *y)
         set_x->rank++;
         set = set_x;
     }
-    
+
+    set->min_id = min_id;
+
     return set;
 }

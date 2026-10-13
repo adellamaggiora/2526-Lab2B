@@ -4,6 +4,8 @@
 typedef struct uf_node
 {
     int id;
+    // Minimo id della componente: la radice lo mantiene per popolare cCon.
+    int min_id;
     struct uf_node *parent;
     int rank;
 } uf_node;

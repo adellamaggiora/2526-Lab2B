@@ -30,6 +30,7 @@
     ******************************************
 */
 
+// aggiorna le prop "gHash", "gHash_length", "node_count", "edge_count" del grafo
 grafo *parse_file(FILE *file)
 {
     assert(file != NULL);
