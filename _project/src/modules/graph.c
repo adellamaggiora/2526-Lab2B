@@ -7,6 +7,7 @@
 
 int compare_edges(const void *x, const void *y)
 {
+    // arrivano puntatori a puntatori (invocazione da compare_edges)
     arco *e1 = *(arco **)x;
     arco *e2 = *(arco **)y;
 
@@ -51,6 +52,7 @@ void free_graph(grafo *graph)
 void sort_edge_pointers_list_by_weight(arco **edge_pointers_list, int list_length)
 {
 
+    // qsort chiama compare_edges passando gli indirizzi di ciò che è contenuto nell'array
     qsort(edge_pointers_list, list_length, sizeof(arco *), &compare_edges);
 }
 
