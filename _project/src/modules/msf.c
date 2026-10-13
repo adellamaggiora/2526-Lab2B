@@ -1,5 +1,5 @@
-#include "graph.h";
-#include "msf.h";
+#include "graph.h"
+#include "msf.h"
 #include "union_find.h"
 #include "error-manager.h"
 #include <stdlib.h>
