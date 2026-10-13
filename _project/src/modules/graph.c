@@ -7,9 +7,11 @@
 
 int compare_edges(const void *x, const void *y)
 {
-    const arco e1 = *(const arco *)x;
-    const arco e2 = *(const arco *)y;
-    return e1.weight - e2.weight;
+    arco *e1 = *(arco **)x;
+    arco *e2 = *(arco **)y;
+
+    return (e1->weight > e2->weight) -
+           (e1->weight < e2->weight);
 }
 
 // public
