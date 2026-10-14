@@ -1,6 +1,7 @@
 #ifndef UNION_FIND_H
 #define UNION_FIND_H
 
+
 typedef struct uf_node
 {
     int id;
@@ -16,3 +17,6 @@ uf_node *find_set(uf_node *x);
 uf_node *union_set(uf_node *x, uf_node *y);
 
 #endif
+
+
+

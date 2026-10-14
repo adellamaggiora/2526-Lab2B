@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "error-manager.h"
-#include "graph.h"
-#include "hash.h"
+#include "utils/error-manager.h"
+#include "graph/graph.h"
+#include "graph/hash.h"
+#include "io/parser_utils.h"
 
 /*
     ******************************************
@@ -31,7 +32,7 @@
 */
 
 // aggiorna le prop "gHash", "gHash_length", "node_count", "edge_count" del grafo
-grafo *parse_file(FILE *file)
+grafo *parse_graph(FILE *file)
 {
     assert(file != NULL);
     char line_type;
@@ -60,10 +61,7 @@ grafo *parse_file(FILE *file)
             insert_edge_into_hash_table(u, v, w, graph->gHash, graph->gHash_length);
             break;
         default:
-            int ch;
-            // leggo un char alla volta finchè non cosnumo la linea (termina con \n)
-            // oppure la fine del file EOF
-            while ((ch = fgetc(file)) != '\n' && ch != EOF);
+            discard_rest_of_line(file);
             break;
         }
     }

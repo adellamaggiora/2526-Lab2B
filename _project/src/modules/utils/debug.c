@@ -1,6 +1,5 @@
 #include <stdio.h>
-#include "debug.h"
-#include "union_find.h"
+#include "utils/debug.h"
 
 void debug_print_hash_table(arco **hash_table, int table_length)
 {

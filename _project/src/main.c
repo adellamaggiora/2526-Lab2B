@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "msf.h"
-#include "parser.h"
-#include "graph.h"
-#include "error-manager.h"
-#include "debug.h"
+#include "graph/msf.h"
+#include "io/graph_parser.h"
+#include "graph/graph.h"
+#include "utils/error-manager.h"
+#include "utils/debug.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,19 +16,14 @@ int main(int argc, char *argv[])
 
     char *filepath = argv[1];
     FILE *file = checked_fopen(filepath, "r");
-    grafo *graph = parse_file(file);
+    grafo *graph = parse_graph(file);
     fclose(file);
     
     // debug_print_hash_table(graph->gHash, graph->gHash_length);
     mst_kruskal(graph);
-
-    printf("%d %d %ld\n",
-           graph->edge_count,
-           graph->numCoCo,
-           graph->costoMSF);
-
+    printf("%d %d %ld\n", graph->edge_count, graph->numCoCo, graph->costoMSF);
     free_graph(graph);
 
-    // equivale a return 0
+    
     return EXIT_SUCCESS;
 }

@@ -1,7 +1,7 @@
 #ifndef HASH_H
 #define HASH_H
 
-#include "graph.h"
+#include "graph/graph.h"
 
 
 int hash_table_length(int edge_count, double load_factor);

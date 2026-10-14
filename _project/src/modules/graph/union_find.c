@@ -1,5 +1,5 @@
-#include "union_find.h"
-#include "error-manager.h"
+#include "graph/union_find.h"
+#include "utils/error-manager.h"
 #include <assert.h>
 
 /*

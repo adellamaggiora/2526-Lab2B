@@ -1,8 +1,9 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-#include "graph.h"
-#include "union_find.h"
+#include "graph/graph.h"
+#include "graph/union_find.h"
+
 
 void debug_print_hash_table(arco **hash_table, int table_length);
 
@@ -16,4 +17,6 @@ void debug_print_array(void *list, size_t list_length, size_t elem_size, void (*
 
 void debug_print_uf_node(uf_node *node);
 
+
 #endif
+

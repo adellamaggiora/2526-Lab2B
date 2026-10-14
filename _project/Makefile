@@ -1,31 +1,40 @@
-CC = gcc
+CC := gcc
 
-CFLAGS = -g -Wall -Wextra -std=gnu11 -pthread
-INCLUDES = -Ilib/tomlc17 -Isrc/modules
+CPPFLAGS := -Isrc/modules -Isrc/modules/graph
+CFLAGS := -O3 -Wall -Wextra -std=gnu11 -pthread
+LDFLAGS := -pthread
+LDLIBS := -lm
 
-# Linka la libreria matematica libm
-LDLIBS = -lm
+TARGET := msf.out
 
-TARGET = build/main
-
-HEADERS = $(wildcard src/modules/*.h)
-
-SOURCES = src/main.c \
-	src/modules/error-manager.c \
-	src/modules/graph.c \
-	src/modules/hash.c \
-	src/modules/debug.c \
-	src/modules/msf.c \
-	src/modules/union_find.c \
-	src/modules/parser.c \
+SOURCES := \
+	src/main.c \
+	src/modules/concurrency/bounded_buffer.c \
+	src/modules/concurrency/graph_operation.c \
+	src/modules/graph/graph.c \
+	src/modules/graph/hash.c \
+	src/modules/graph/msf.c \
+	src/modules/graph/union_find.c \
+	src/modules/io/graph_parser.c \
+	src/modules/io/operation_parser.c \
+	src/modules/io/parser_utils.c \
+	src/modules/utils/debug.c \
+	src/modules/utils/error-manager.c
+OBJECTS := $(patsubst src/%.c,build/%.o,$(SOURCES))
+DEPENDENCIES := $(OBJECTS:.o=.d)
 
 .PHONY: all clean
 
 all: $(TARGET)
 
-$(TARGET): $(SOURCES) $(HEADERS)
-	mkdir -p build
-	$(CC) $(CFLAGS) $(INCLUDES) $(SOURCES) -o $(TARGET) $(LDLIBS)
+$(TARGET): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@ $(LDLIBS)
+
+build/%.o: src/%.c
+	mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -MMD -MP -c $< -o $@
+
+-include $(DEPENDENCIES)
 
 clean:
-	rm -rf build
+	rm -rf build $(TARGET)

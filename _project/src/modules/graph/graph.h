@@ -69,3 +69,4 @@ void sort_edge_pointers_list_by_weight(arco **edge_pointers_list, int list_lengt
 void add_vicini(grafo *graph, const arco *edge);
 
 #endif
+

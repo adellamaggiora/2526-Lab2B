@@ -1,8 +1,8 @@
 #include <stddef.h>
 #include <math.h>
 #include <stdint.h>
-#include "graph.h"
-#include "hash.h"
+#include "graph/graph.h"
+#include "graph/hash.h"
 
 
 

@@ -1,5 +1,5 @@
-#include "graph.h"
-#include "error-manager.h"
+#include "graph/graph.h"
+#include "utils/error-manager.h"
 #include <assert.h>
 #include <stdlib.h>
 

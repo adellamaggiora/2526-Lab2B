@@ -1,11 +1,10 @@
-#include "graph.h"
-#include "msf.h"
-#include "union_find.h"
-#include "error-manager.h"
+#include "graph/graph.h"
+#include "graph/msf.h"
+#include "graph/union_find.h"
+#include "utils/error-manager.h"
 #include <stdlib.h>
-#include "debug.h"
+#include "utils/debug.h"
 #include <assert.h>
-#include "graph.h"
 
 /**
  * *******************************************************
