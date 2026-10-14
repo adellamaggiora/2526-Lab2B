@@ -19,7 +19,7 @@ static int compare_edges(const void *x, const void *y)
            (e1->weight < e2->weight);
 }
 
-// passo riferimento alla testa per poterla modificare
+// passo puntatore alla testa per poterla modificare
 static void insert_vicino_sorted_by_id(
     elemento **head,
     int id,
@@ -126,6 +126,7 @@ arco **get_edge_pointers_list(grafo *graph)
     return list;
 }
 
+// aggiunge u come vicino di v e viceversa
 void add_vicini(grafo *graph, const arco *edge)
 {
     assert(graph != NULL);

@@ -32,4 +32,11 @@ typedef struct bounded_buffer {
 
 
 
+
+void enqueue_operation(bounded_buffer *buffer, graph_operation operation)
+
+
+graph_operation dequeue_operation(bounded_buffer *buffer)
+
+
 #endif

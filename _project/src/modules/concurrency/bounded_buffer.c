@@ -2,7 +2,7 @@
 #include <pthread.h>
 #include <bounded_buffer.h>
 #include <error-manager.h>
-
+#include <graph_operation.h>
 
 // produttore
 void enqueue_operation(bounded_buffer *buffer, graph_operation operation) {
