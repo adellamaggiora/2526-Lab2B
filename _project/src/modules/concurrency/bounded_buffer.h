@@ -10,8 +10,8 @@
 
 
 typedef struct bounded_buffer {
-    // numero massimo elementi nella coda
     int capacity;
+    int size;
 
     // indice estrazione op
     int head;
