@@ -1,18 +1,18 @@
 {
     "configurations": [
         {
-            "name": "Linux GCC",
+            "name": "MSYS2 UCRT64 GCC",
             "includePath": [
                 "${workspaceFolder}/**"
             ],
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "C:/msys64/ucrt64/bin/gcc.exe",
             "compilerArgs": [
                 "-std=gnu11",
                 "-pthread"
             ],
             "cStandard": "gnu11",
             "cppStandard": "c++17",
-            "intelliSenseMode": "linux-gcc-x64"
+            "intelliSenseMode": "windows-gcc-x64"
         }
     ],
     "version": 4

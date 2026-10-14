@@ -1,5 +1,5 @@
-#ifndef OPERATIONS_H
-#define OPERATIONS_H
+#ifndef GRAPH_OPERATIONS_H
+#define GRAPH_OPERATIONS_H
 
 #include <graph.h>
 

@@ -11,7 +11,7 @@
     ***************************************************
 */
 
-void checked_pthread(int error_code, const char *message)
+void check_pthread(int error_code, const char *message)
 {
     if (error_code != 0)
     {
@@ -66,21 +66,17 @@ void *checked_realloc(void *pointer, size_t size)
     return new_pointer;
 }
 
-int checked_pthread_create(
-    pthread_t *thread,
-    const pthread_attr_t *attributes,
-    void *(*start_routine)(void *),
-    void *argument)
+int checked_pthread_create(pthread_t *thread, const pthread_attr_t *attributes, void *(*start_routine)(void *), void *argument)
 {
     int error = pthread_create(thread, attributes, start_routine, argument);
-    checked_pthread(error, "pthread_create failed");
+    check_pthread(error, "pthread_create failed");
     return error;
 }
 
 int checked_pthread_join(pthread_t thread, void **return_value)
 {
     int error = pthread_join(thread, return_value);
-    checked_pthread(error, "pthread_join failed");
+    check_pthread(error, "pthread_join failed");
     return error;
 }
 
@@ -89,66 +85,62 @@ int checked_pthread_mutex_init(
     const pthread_mutexattr_t *attributes)
 {
     int error = pthread_mutex_init(mutex, attributes);
-    checked_pthread(error, "pthread_mutex_init failed");
+    check_pthread(error, "pthread_mutex_init failed");
     return error;
 }
 
 int checked_pthread_mutex_destroy(pthread_mutex_t *mutex)
 {
     int error = pthread_mutex_destroy(mutex);
-    checked_pthread(error, "pthread_mutex_destroy failed");
+    check_pthread(error, "pthread_mutex_destroy failed");
     return error;
 }
 
 int checked_pthread_mutex_lock(pthread_mutex_t *mutex)
 {
     int error = pthread_mutex_lock(mutex);
-    checked_pthread(error, "pthread_mutex_lock failed");
+    check_pthread(error, "pthread_mutex_lock failed");
     return error;
 }
 
 int checked_pthread_mutex_unlock(pthread_mutex_t *mutex)
 {
     int error = pthread_mutex_unlock(mutex);
-    checked_pthread(error, "pthread_mutex_unlock failed");
+    check_pthread(error, "pthread_mutex_unlock failed");
     return error;
 }
 
-int checked_pthread_cond_init(
-    pthread_cond_t *condition,
-    const pthread_condattr_t *attributes)
+int checked_pthread_cond_init(pthread_cond_t *condition, const pthread_condattr_t *attributes)
 {
     int error = pthread_cond_init(condition, attributes);
-    checked_pthread(error, "pthread_cond_init failed");
+    check_pthread(error, "pthread_cond_init failed");
     return error;
 }
 
 int checked_pthread_cond_destroy(pthread_cond_t *condition)
 {
     int error = pthread_cond_destroy(condition);
-    checked_pthread(error, "pthread_cond_destroy failed");
+    check_pthread(error, "pthread_cond_destroy failed");
     return error;
 }
 
-int checked_pthread_cond_wait(
-    pthread_cond_t *condition,
-    pthread_mutex_t *mutex)
+int checked_pthread_cond_wait(pthread_cond_t *condition, pthread_mutex_t *mutex)
 {
     int error = pthread_cond_wait(condition, mutex);
-    checked_pthread(error, "pthread_cond_wait failed");
+    check_pthread(error, "pthread_cond_wait failed");
     return error;
 }
 
 int checked_pthread_cond_signal(pthread_cond_t *condition)
 {
     int error = pthread_cond_signal(condition);
-    checked_pthread(error, "pthread_cond_signal failed");
+    check_pthread(error, "pthread_cond_signal failed");
     return error;
 }
 
 int checked_pthread_cond_broadcast(pthread_cond_t *condition)
 {
     int error = pthread_cond_broadcast(condition);
-    checked_pthread(error, "pthread_cond_broadcast failed");
+    check_pthread(error, "pthread_cond_broadcast failed");
     return error;
 }
