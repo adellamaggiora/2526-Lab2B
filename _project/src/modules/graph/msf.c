@@ -31,6 +31,7 @@ void mst_kruskal(grafo *graph)
     }
 
     graph->costoMSF = 0;
+    // ogni nodo parte come componente a sè stante
     graph->numCoCo = graph->node_count;
     graph->vicini = checked_calloc(graph->node_count, sizeof(elemento *));
 

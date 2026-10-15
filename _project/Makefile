@@ -11,6 +11,7 @@ SOURCES := \
 	src/main.c \
 	src/modules/concurrency/bounded_buffer.c \
 	src/modules/concurrency/graph_operation.c \
+	src/modules/graph/components.c \
 	src/modules/graph/graph.c \
 	src/modules/graph/hash.c \
 	src/modules/graph/msf.c \

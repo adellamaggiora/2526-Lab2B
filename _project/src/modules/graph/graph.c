@@ -15,8 +15,7 @@ static int compare_edges(const void *x, const void *y)
     arco *e1 = *(arco **)x;
     arco *e2 = *(arco **)y;
 
-    return (e1->weight > e2->weight) -
-           (e1->weight < e2->weight);
+    return (e1->weight > e2->weight) - (e1->weight < e2->weight);
 }
 
 // passo puntatore alla testa per poterla modificare
@@ -43,7 +42,6 @@ static void insert_vicino_sorted_by_id(
     new_element->next = *head;
     *head = new_element;
 }
-
 
 /*
 *******
@@ -144,4 +142,18 @@ void add_vicini(grafo *graph, const arco *edge)
         edge->u,
         edge->weight,
         edge->msf);
+}
+
+
+// cerca nel path da u a v nell'albero di copertura minimo.
+// appartengono alla stessa CoCo quindi mst e non msf
+arco *find_biggest_edge_into_mst_path(grafo *graph, int u, int v)
+{
+    elemento *vicini_u = graph->vicini[u];
+    while (vicini_u->next != NULL)
+    {
+        /* code */
+    }
+    
+
 }

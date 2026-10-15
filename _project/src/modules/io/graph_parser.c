@@ -31,7 +31,7 @@
     ******************************************
 */
 
-// aggiorna le prop "gHash", "gHash_length", "node_count", "edge_count" del grafo
+// valorizza le prop "gHash", "gHash_length", "node_count", "edge_count" del grafo
 grafo *parse_graph(FILE *file)
 {
     assert(file != NULL);
@@ -47,17 +47,21 @@ grafo *parse_graph(FILE *file)
         case 'p':
             int node_count, edge_count;
             if (fscanf(file, " sp %d %d", &node_count, &edge_count) != 2)
+            {
                 terminate("Invalid graph header");
+            }
             graph->gHash_length = hash_table_length(edge_count, 0.6);
             graph->node_count = node_count + 1;
             graph->edge_count = edge_count;
             graph->gHash = checked_calloc(graph->gHash_length, sizeof(arco *));
-            
+
             break;
         case 'a':
             int u, v, w;
             if (fscanf(file, " %d %d %d", &u, &v, &w) != 3)
+            {
                 terminate("Invalid edge");
+            }
             insert_edge_into_hash_table(u, v, w, graph->gHash, graph->gHash_length);
             break;
         default:

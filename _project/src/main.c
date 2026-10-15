@@ -20,10 +20,12 @@ int main(int argc, char *argv[])
     fclose(file);
     
     // debug_print_hash_table(graph->gHash, graph->gHash_length);
+
     mst_kruskal(graph);
     printf("%d %d %ld\n", graph->edge_count, graph->numCoCo, graph->costoMSF);
-    free_graph(graph);
 
-    
+
+
+    free_graph(graph);
     return EXIT_SUCCESS;
 }
