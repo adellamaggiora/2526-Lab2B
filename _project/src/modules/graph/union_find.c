@@ -69,6 +69,7 @@ uf_node *union_set(uf_node *x, uf_node *y)
     }
 
     uf_node *set;
+    // la radice minima è il rappresentante della CoCo
     int min_id;
 
     if (set_x->min_id < set_y->min_id)
@@ -80,6 +81,7 @@ uf_node *union_set(uf_node *x, uf_node *y)
         min_id = set_y->min_id;
     }
 
+    // controllo del rango
     if (set_x->rank > set_y->rank)
     {
         set_y->parent = set_x;
