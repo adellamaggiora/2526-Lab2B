@@ -49,3 +49,4 @@ arco *insert_edge_into_hash_table(int u, int v, int w, arco **hash_table, int ha
 
     return new_edge;
 }
+

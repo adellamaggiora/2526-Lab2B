@@ -183,6 +183,11 @@ e restituisce l'errore al sistema operativo
     ```c
     sizeof(int)
     ```
+- l'aritmetica dei puntatori permette di calcolare l'indirizzo dell'elemento desiderato a partire dall'indirizzo iniziale e dal suo indice. Ad esempio con questo codice si ottiere l'indirizzo del terzo `int` della lista:
+    ```c
+    int *base;
+    base + 2;
+    ```
 
 
 ## Gestione della memoria e allocazione dinamica

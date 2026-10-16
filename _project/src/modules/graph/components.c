@@ -1,6 +1,7 @@
 #include "graph/components.h"
 
 #include <assert.h>
+#include <stddef.h>
 
 void merge_connected_components(grafo *graph, int u, int v)
 {

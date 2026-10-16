@@ -145,15 +145,19 @@ void add_vicini(grafo *graph, const arco *edge)
 }
 
 
-// cerca nel path da u a v nell'albero di copertura minimo.
-// appartengono alla stessa CoCo quindi mst e non msf
-arco *find_biggest_edge_into_mst_path(grafo *graph, int u, int v)
+// cerca il path da u a v nell'albero di copertura minimo
+arco *bfs_on_mst(grafo *graph, int u, int v)
 {
+
+    // u è il nodo radice
+    
+
+
+
+
+
     elemento *vicini_u = graph->vicini[u];
-    while (vicini_u->next != NULL)
-    {
-        /* code */
-    }
+
     
 
 }

@@ -22,9 +22,10 @@ void mst_kruskal(grafo *graph)
     sort_edge_pointers_list_by_weight(edge_list, graph->edge_count);
     // debug_print_pointer_list(edge_list, graph->edge_count, debug_print_edge);
 
-    // iterazione sui nodi
+    
     uf_node *uf_node_list = checked_malloc(graph->node_count * sizeof(uf_node));
 
+    // iterazione sui nodi
     for (int i = 0; i < graph->node_count; i++)
     {
         make_set(&uf_node_list[i], i);

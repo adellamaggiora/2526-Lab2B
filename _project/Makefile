@@ -1,6 +1,6 @@
 CC := gcc
 
-CPPFLAGS := -Isrc/modules -Isrc/modules/graph
+CPPFLAGS := -Isrc/modules -Isrc/modules/concurrency -Isrc/modules/graph -Isrc/modules/utils
 CFLAGS := -O3 -Wall -Wextra -std=gnu11 -pthread
 LDFLAGS := -pthread
 LDLIBS := -lm
@@ -11,6 +11,7 @@ SOURCES := \
 	src/main.c \
 	src/modules/concurrency/bounded_buffer.c \
 	src/modules/concurrency/graph_operation.c \
+	src/modules/data_structures/circular_buffer.c \
 	src/modules/graph/components.c \
 	src/modules/graph/graph.c \
 	src/modules/graph/hash.c \
