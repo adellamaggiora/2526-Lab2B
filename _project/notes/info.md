@@ -188,7 +188,9 @@ e restituisce l'errore al sistema operativo
     int *base;
     base + 2;
     ```
+- Il tipo del puntatore non cambia la memoria: cambia la lunghezza dei passi con cui la attraversi.
 
+- Un puntatore è un robottino sulla memoria: l’indirizzo dice da dove parte, il tipo decide quanto sono lunghi i suoi passi.
 
 ## Gestione della memoria e allocazione dinamica
 

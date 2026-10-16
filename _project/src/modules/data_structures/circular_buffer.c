@@ -54,14 +54,13 @@ bool circular_buffer_push(circular_buffer *buffer, const void *element)
         return false;
     }
     
-
     // il problema di questa riga è che data, essendo un puntatore a void,
     // non sa di quanti byte deve spostarsi, quindi devo trattare data come char (1 byte)
     // char *insert_address = buffer->data + (buffer->element_size * buffer->tail);
 
     char *start_address = buffer->data;
-    char *insert_address = start_address + (buffer->element_size * buffer->tail);
-    memcpy(insert_address, element, buffer->element_size);
+    char *tail_address = start_address + (buffer->element_size * buffer->tail);
+    memcpy(tail_address, element, buffer->element_size);
 
     // circolarità
     buffer->tail++;
@@ -83,4 +82,13 @@ bool circular_buffer_pop(circular_buffer *buffer, void *element)
     }
 
 
+    char *start_adress = buffer->data;
+    char *head_address = start_adress + (buffer->element_size * buffer->head);
+    memcpy(element, head_address, buffer->element_size);
+
+    buffer->size--;
+    buffer->head++;
+    buffer->head = buffer->head % buffer->capacity;
+
+    return true;
 }
