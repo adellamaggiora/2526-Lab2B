@@ -145,11 +145,11 @@ void add_vicini(grafo *graph, const arco *edge)
 }
 
 
-// cerca il path da u a v nell'albero di copertura minimo
+// cerca il path da u a v solo nell'albero di copertura minimo
 arco *bfs_on_mst(grafo *graph, int u, int v)
 {
 
-    // u è il nodo radice
+    
     
 
 

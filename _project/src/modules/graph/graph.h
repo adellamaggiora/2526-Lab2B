@@ -3,23 +3,21 @@
 
 #include <stdbool.h>
 
-
-/* 
+/*
     ***************************************
     strutture dati già fornite nel progetto
     ***************************************
-    
-    solo alcune prop sono aggiunte da me (extra)
-    uso nomi delle prop in inglese 
 
-    ad eccezione di "weight", "next" e "msf" 
+    solo alcune prop sono aggiunte da me (extra)
+    uso nomi delle prop in inglese
+
+    ad eccezione di "weight", "next" e "msf"
     erano le uniche prop già presenti in inglese
 */
 
-
-
 // invariante: u < v
-typedef struct arco {
+typedef struct arco
+{
     int u, v;
     int weight;
     // se l'arco appartiene alla msf del grafo
@@ -29,7 +27,8 @@ typedef struct arco {
 
 
 // elemento di una lista di adiacenza, id rappresenta il nodo vicino
-typedef struct elemento {
+typedef struct elemento
+{
     int id;
     int w;
     bool msf;
@@ -37,7 +36,8 @@ typedef struct elemento {
 } elemento;
 
 
-typedef struct grafo {
+typedef struct grafo
+{
     arco **gHash;
     // questo array è indicizzato con l'id del nodo
     elemento **vicini;
@@ -51,22 +51,48 @@ typedef struct grafo {
 
     /*
         prop "extra" (aggiunte da me)
-    */ 
+    */
     int node_count;
     int edge_count;
     int gHash_length;
 } grafo;
 
 
+
+typedef enum bfs_node_status
+{
+    WHITE,
+    GRAY,
+    BLACK
+} bfs_node_status;
+
+
+
+typedef struct bfs_node
+{
+    int id;
+    bfs_node_status visited;
+    bfs_node *parent;
+} bfs_node;
+
+
+
+// functions
+
 arco *build_edge(int u, int v, int w);
+
 
 arco **get_edge_pointers_list(grafo *graph);
 
+
 void free_graph(grafo *graph);
+
 
 void sort_edge_pointers_list_by_weight(arco **edge_pointers_list, int list_length);
 
+
 void add_vicini(grafo *graph, const arco *edge);
 
-#endif
 
+
+#endif

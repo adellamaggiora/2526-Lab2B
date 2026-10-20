@@ -17,14 +17,6 @@ docker run -it --rm -v ${PWD}:/workspace -p 5000:5000 <image-name>
 
 Avvio del container in modo interattivo, montando la cartella corrente dentro `/workspace`.
 
-La parte:
-
-```bash
--p 5000:5000
-```
-
-serve per usare strumenti via browser, ad esempio `gdbgui`.
-
 
 ## Guida alla compilazione
 
