@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-#include "concurrency/operation_queue.h"
+#include "concurrency/bounded_buffer.h"
 
 bool read_next_operation(
     FILE *file,
@@ -11,6 +11,6 @@ bool read_next_operation(
 
 void produce_operations(
     FILE *file,
-    operation_queue *queue);
+    bounded_buffer *buffer);
 
 #endif

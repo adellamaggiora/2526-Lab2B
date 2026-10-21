@@ -5,7 +5,7 @@ CFLAGS := -O3 -Wall -Wextra -std=gnu11 -pthread
 LDFLAGS := -pthread
 LDLIBS := -lm
 
-TARGET := msf.out
+TARGET := build/msf.out
 
 SOURCES := \
 	src/main.c \
@@ -39,4 +39,4 @@ build/%.o: src/%.c
 -include $(DEPENDENCIES)
 
 clean:
-	rm -rf build $(TARGET)
+	rm -rf build msf.out

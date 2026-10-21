@@ -24,7 +24,7 @@ bool read_next_operation(
                 discard_rest_of_line(file);
                 break;
             }
-            operation->type = OPERATION_ADD;
+            operation->type = ADD_EDGE;
             return true;
 
         case '-':
@@ -33,7 +33,7 @@ bool read_next_operation(
                 discard_rest_of_line(file);
                 break;
             }
-            operation->type = OPERATION_REMOVE;
+            operation->type = REMOVE_EDGE;
             operation->weight = 0;
             return true;
 
@@ -51,20 +51,15 @@ bool read_next_operation(
     return false;
 }
 
-void produce_operations(FILE *file, operation_queue *queue)
+void produce_operations(FILE *file, bounded_buffer *buffer)
 {
     assert(file != NULL);
-    assert(queue != NULL);
+    assert(buffer != NULL);
 
     graph_operation operation;
 
     while (read_next_operation(file, &operation))
     {
-        if (!operation_queue_push(queue, operation))
-        {
-            return;
-        }
+        enqueue_operation(buffer, operation);
     }
-
-    operation_queue_close(queue);
 }

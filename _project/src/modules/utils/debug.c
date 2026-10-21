@@ -15,6 +15,11 @@ void debug_print_hash_table(arco **hash_table, int table_length)
     }
 }
 
+void debug_print_int(void *element)
+{
+    fprintf(stderr, "%d \n", *(int *)element);
+}
+
 void debug_print_edge(arco *edge)
 {
     fprintf(stderr, "->(u %d, v %d, w %d, msf %s)\n",
@@ -51,7 +56,7 @@ void debug_print_pointer_list(
     }
 }
 
-void debug_print_array(
+void debug_print_list(
     void *list,
     size_t list_length,
     size_t elem_size,

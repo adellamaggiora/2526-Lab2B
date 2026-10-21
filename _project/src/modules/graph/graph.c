@@ -2,12 +2,7 @@
 #include "utils/error-manager.h"
 #include <assert.h>
 #include <stdlib.h>
-
-/*
-*******
-private
-*******
-*/
+#include "data_structures/circular_buffer.h"
 
 static int compare_edges(const void *x, const void *y)
 {
@@ -19,11 +14,7 @@ static int compare_edges(const void *x, const void *y)
 }
 
 // passo puntatore alla testa per poterla modificare
-static void insert_vicino_sorted_by_id(
-    elemento **head,
-    int id,
-    int weight,
-    bool msf)
+static void insert_vicino_sorted_by_id(elemento **head, int id, int weight, bool msf)
 {
     assert(head != NULL);
 
@@ -42,12 +33,6 @@ static void insert_vicino_sorted_by_id(
     new_element->next = *head;
     *head = new_element;
 }
-
-/*
-*******
-public
-*******
-*/
 
 arco *build_edge(int u, int v, int w)
 {
@@ -144,20 +129,81 @@ void add_vicini(grafo *graph, const arco *edge)
         edge->msf);
 }
 
-
-// cerca il path da u a v solo nell'albero di copertura minimo
-arco *bfs_on_mst(grafo *graph, int u, int v)
+// restituisce il path da u a v nell'albero di copertura minimo
+bsf_result bfs_on_mst(grafo *graph, int u, int v)
 {
+    assert(graph != NULL);
+    bsf_result result = {0, NULL};
 
-    
-    
+    bfs_node *nodes = checked_malloc(graph->node_count * sizeof(bfs_node));
 
+    for (int i = 0; i < graph->node_count; i++)
+    {
+        nodes[i] = (bfs_node){false, -1};
+    }
 
+    circular_buffer queue;
+    circular_buffer_init(&queue, graph->node_count, sizeof(int));
 
+    nodes[u].visited = true;
+    circular_buffer_push(&queue, &u);
 
+    while (!circular_buffer_is_empty(&queue))
+    {
+        int node;
+        circular_buffer_pop(&queue, &node);
 
-    elemento *vicini_u = graph->vicini[u];
+        elemento *neighbour = graph->vicini[node];
 
-    
+        while (neighbour != NULL)
+        {
+            int neighbour_id = neighbour->id;
 
+            if (neighbour->msf && nodes[neighbour_id].visited == false)
+            {
+                nodes[neighbour_id].visited = true;
+                nodes[neighbour_id].parent = node;
+                circular_buffer_push(&queue, &neighbour_id);
+            }
+
+            neighbour = neighbour->next;
+        }
+    }
+
+    // se v non `e raggiungibile
+    if (!nodes[v].visited)
+    {
+        circular_buffer_destroy(&queue);
+        free(nodes);
+        return result;
+    }
+
+    int node = v;
+    result.path_length = 1;
+
+    while (node != u)
+    {
+        node = nodes[node].parent;
+        result.path_length++;
+    }
+
+    result.path = checked_malloc(result.path_length * sizeof(int));
+    node = v;
+
+    for (int i = result.path_length - 1; i >= 0; i--)
+    {
+        result.path[i] = node;
+        node = nodes[node].parent;
+    }
+
+    circular_buffer_destroy(&queue);
+    free(nodes);
+
+    // risultato copiato al chiamante (struct)
+    return result;
+}
+
+// sia nell'array vicini che nella tabella hash
+void remove_edge_from_msf()
+{
 }

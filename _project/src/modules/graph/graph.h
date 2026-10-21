@@ -58,22 +58,18 @@ typedef struct grafo
 } grafo;
 
 
-
-typedef enum bfs_node_status
-{
-    WHITE,
-    GRAY,
-    BLACK
-} bfs_node_status;
-
-
-
 typedef struct bfs_node
 {
-    int id;
-    bfs_node_status visited;
-    bfs_node *parent;
+    bool visited;
+    int parent;
 } bfs_node;
+
+
+typedef struct bsf_result
+{
+    int path_length;
+    int *path;
+} bsf_result;
 
 
 
@@ -92,6 +88,9 @@ void sort_edge_pointers_list_by_weight(arco **edge_pointers_list, int list_lengt
 
 
 void add_vicini(grafo *graph, const arco *edge);
+
+
+bsf_result bfs_on_mst(grafo *graph, int u, int v);
 
 
 
