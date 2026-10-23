@@ -204,12 +204,15 @@ e restituisce l'errore al sistema operativo
     - **Static/global lifetime**: memoria statica o globale; non si libera con `free`.
     - **Stack ownership**: variabili locali automatiche; vengono distrutte automaticamente uscendo dallo scope
 
-- il seguente codice dà un errore perchè total_nodes viene calcolato a run-time e non
-a compile-time. Il compilatore richiede una dimensione nota a tempo di compilazione
+- il seguente codice dichiara un VLA (Variable Length Array): la dimensione viene calcolata a run-time. È valido nei compilatori C che supportano i VLA, ma non rispetta il requisito del progetto:
 ```c    
     int total_nodes = max_node_index + 1;
     struct uf_node nodes[total_nodes];
 ```
+
+- nel progetto gli array e i dati del grafo devono essere allocati dinamicamente (`malloc`, `calloc`, `realloc`), con la sola eccezione del buffer produttore-consumatore. Evitare quindi VLA e array locali a dimensione fissa: con grafi grandi possono esaurire lo stack. L'allocazione dinamica permette di scegliere la dimensione a run-time, controllare il fallimento e gestire la durata della memoria con `free`. Variabili scalari, puntatori e piccole struct descrittive possono restare locali.
+
+- `calloc` alloca memoria dinamica e azzera ogni byte: non è un'allocazione sullo stack. Usarla quando serve memoria inizializzata a zero evita cicli di inizializzazione; sulle piattaforme del progetto, i puntatori azzerati rappresentano `NULL`.
 
 - la memoria va liberata con l'utilizzo di `free()` solo per la memoria ottenuta con `malloc`, `calloc` o `realloc`
 

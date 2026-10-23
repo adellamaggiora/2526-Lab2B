@@ -3,6 +3,7 @@
 #include <components.h>
 #include <error-manager.h>
 #include "debug.h"
+#include <stdlib.h>
 
 
 int add_edge(grafo *graph, int u, int v, int w)
@@ -36,6 +37,7 @@ int add_edge(grafo *graph, int u, int v, int w)
 
 
         debug_print_list(bsf.path, bsf.path_length, sizeof(int), debug_print_int);
+        free(bsf.path);
     }
 
     return 1;

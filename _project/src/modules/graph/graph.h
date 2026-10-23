@@ -90,6 +90,7 @@ void sort_edge_pointers_list_by_weight(arco **edge_pointers_list, int list_lengt
 void add_vicini(grafo *graph, const arco *edge);
 
 
+// il chiamante deve liberare il path restituito con free
 bsf_result bfs_on_mst(grafo *graph, int u, int v);
 
 
