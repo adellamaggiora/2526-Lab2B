@@ -7,9 +7,11 @@
 
 int add_edge(grafo *graph, int u, int v, int w)
 {
-    // se gli identificatori dei nodi non sono validi l'operazione non e' valida
+    // se gli identificatori dei nodi non sono validi
     if (u < 0 || v < 0 || u >= graph->node_count || v >= graph->node_count)
+    {
         return 0;
+    }
 
     // se u e v non appartengono alla stessa cCon allora devo aggiungere tale arco alla MSF
     int u_cCon = graph->cCon[u];
@@ -31,7 +33,7 @@ int add_edge(grafo *graph, int u, int v, int w)
         bsf_result bsf = bfs_on_mst(graph, u, v);
         // se il peso del nuovo arco (u, v, w) 
         // è minore del peso max di un arco nel cammino allora lo sostituisco
-        
+
 
         debug_print_list(bsf.path, bsf.path_length, sizeof(int), debug_print_int);
     }
