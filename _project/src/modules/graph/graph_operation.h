@@ -1,7 +1,7 @@
 #ifndef GRAPH_OPERATIONS_H
 #define GRAPH_OPERATIONS_H
 
-#include <graph.h>
+#include "graph/graph.h"
 
 
 typedef enum graph_operation_type {
@@ -17,5 +17,11 @@ typedef struct graph_operation {
     int v;
     int weight;
 } graph_operation;
+
+
+int add_edge(grafo *graph, int u, int v, int w);
+
+
+
 
 #endif

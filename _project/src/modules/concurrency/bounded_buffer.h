@@ -3,7 +3,7 @@
 
 
 #include <pthread.h>
-#include <graph_operation.h>
+#include "graph/graph_operation.h"
 #include <data_structures/circular_buffer.h>
 
 

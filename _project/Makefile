@@ -10,7 +10,7 @@ TARGET := build/msf.out
 SOURCES := \
 	src/main.c \
 	src/modules/concurrency/bounded_buffer.c \
-	src/modules/concurrency/graph_operation.c \
+	src/modules/graph/graph_operation.c \
 	src/modules/data_structures/circular_buffer.c \
 	src/modules/graph/components.c \
 	src/modules/graph/graph.c \

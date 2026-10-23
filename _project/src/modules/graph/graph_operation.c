@@ -1,12 +1,16 @@
-#include <graph.h>
+#include "graph/graph_operation.h"
 #include <hash.h>
 #include <components.h>
 #include <error-manager.h>
 #include "debug.h"
 
 
-void add_raw_edge(grafo *graph, int u, int v, int w)
+int add_edge(grafo *graph, int u, int v, int w)
 {
+    // se gli identificatori dei nodi non sono validi l'operazione non e' valida
+    if (u < 0 || v < 0 || u >= graph->node_count || v >= graph->node_count)
+        return 0;
+
     // se u e v non appartengono alla stessa cCon allora devo aggiungere tale arco alla MSF
     int u_cCon = graph->cCon[u];
     int v_cCon = graph->cCon[v];
@@ -21,12 +25,18 @@ void add_raw_edge(grafo *graph, int u, int v, int w)
         // aggiornamento dell'array cCon delle componenti connesse
         merge_connected_components(graph, u, v);
     }
-
     else
     {
+        // bfs fino da u a v nell'mst
         bsf_result bsf = bfs_on_mst(graph, u, v);
+        // se il peso del nuovo arco (u, v, w) 
+        // è minore del peso max di un arco nel cammino allora lo sostituisco
+        
+
         debug_print_list(bsf.path, bsf.path_length, sizeof(int), debug_print_int);
     }
+
+    return 1;
 }
 
 void remove_edge()

@@ -1,0 +1,7 @@
+c I nodi 1, 2, 3, 4 e 5 sono nella stessa componente connessa.
+c Per il test puoi aggiungere, ad esempio, l'arco (1, 3, 3).
+p sp 5 4
+a 1 2 4
+a 2 3 7
+a 3 4 2
+a 4 5 6
