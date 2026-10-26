@@ -27,7 +27,7 @@
     inizializza un uf_node
     senza sprecare memoria dinamica
 */
-void make_set(uf_node *node, int x)
+void make_set(uf_node *node, int x)  
 {
     assert(node != NULL);
     assert(x >= 0);
@@ -73,7 +73,7 @@ uf_node *union_set(uf_node *x, uf_node *y)
     int min_id;
 
     if (set_x->min_id < set_y->min_id)
-    {
+    { 
         min_id = set_x->min_id;
     }
     else
@@ -102,5 +102,5 @@ uf_node *union_set(uf_node *x, uf_node *y)
 
     set->min_id = min_id;
 
-    return set;
+    return set;  
 }

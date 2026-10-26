@@ -58,6 +58,7 @@ typedef struct grafo
 } grafo;
 
 
+// usato in un array: l'indice e' in biezione con l'id del nodo, quindi non serve next
 typedef struct bfs_node
 {
     bool visited;
@@ -65,7 +66,6 @@ typedef struct bfs_node
     // peso dell'arco che collega il nodo al parent
     int weight;
 } bfs_node;
-
 
 
 // functions
@@ -79,16 +79,14 @@ arco **get_edge_pointers_list(grafo *graph);
 void free_graph(grafo *graph);
 
 
-void sort_edge_pointers_list_by_weight(arco **edge_pointers_list, int list_length);
-
-
 void add_vicini(grafo *graph, const arco *edge);
 
+void remove_vicini(grafo *graph, const arco *edge);
 
-// restituisce l'arco massimo del cammino nella MSF, oppure NULL se non ci sono archi
-// l'arco appartiene al grafo e non deve essere liberato dal chiamante
-arco *find_max_edge_on_mst_path(grafo *graph, int u, int v);
-
+// visita tutti i nodi raggiungibili
+// only_msf limita la visita agli archi della MSF
+// restituisce un array indicizzato per nodo, da liberare con free
+bfs_node *bfs(const grafo *graph, int start, bool only_msf);
 
 
 #endif

@@ -1,5 +1,6 @@
 #include "graph/graph.h"
 #include "graph/msf.h"
+#include "graph/hash.h"
 #include "graph/union_find.h"
 #include "utils/error-manager.h"
 #include <stdlib.h>
@@ -13,6 +14,22 @@
  *
  * *******************************************************
  */
+
+static int compare_edges(const void *x, const void *y)
+{
+    // arrivano puntatori a puntatori (invocazione da compare_edges)
+    arco *e1 = *(arco **)x;
+    arco *e2 = *(arco **)y;
+
+    return (e1->weight > e2->weight) - (e1->weight < e2->weight);
+}
+
+static void sort_edge_pointers_list_by_weight(arco **edge_pointers_list, int list_length)
+{
+
+    // qsort chiama compare_edges passando gli indirizzi di ciò che è contenuto nell'array
+    qsort(edge_pointers_list, list_length, sizeof(arco *), &compare_edges);
+}
 
 // al termine di questo algoritmo devono essere valorizzat i campi
 // "vicini", "cCon", "numCoCo", "gHash->msf" del grafo
@@ -73,4 +90,70 @@ void mst_kruskal(grafo *graph)
     free(edge_list);
 
 
+}
+
+// restituisce l'arco massimo sul cammino da u a v nell'albero di copertura minimo
+arco *find_max_edge_on_mst_path(grafo *graph, int u, int v)
+{
+    assert(graph != NULL);
+    assert(u >= 0 && u < graph->node_count);
+    assert(v >= 0 && v < graph->node_count);
+    arco *result = NULL;
+
+    bfs_node *nodes = bfs(graph, u, true);
+
+    // se v e' raggiungibile cerco l'arco massimo risalendo i parent
+    if (nodes[v].visited && u != v)
+    {
+        int max_node = v;
+        for (int node = v; node != u; node = nodes[node].parent)
+        {
+            if (nodes[node].weight > nodes[max_node].weight)
+                max_node = node;
+        }
+
+        int x = nodes[max_node].parent;
+        int y = max_node;
+        // nella hash gli archi hanno sempre u < v
+        if (x > y)
+        {
+            int tmp = x;
+            x = y;
+            y = tmp;
+        }
+        result = find_edge_in_hash_table(graph->gHash, graph->gHash_length, x, y, NULL);
+    }
+
+    free(nodes);
+
+    return result;
+}
+
+// sia nell'array vicini che nella tabella hash
+void remove_edge_from_msf(grafo *graph, arco *edge)
+{
+    assert(graph != NULL);
+    assert(graph->vicini != NULL);
+    assert(edge != NULL);
+
+    edge->msf = false;
+
+    // aggiorno il flag anche nelle due liste di adiacenza
+    for (elemento *neighbour = graph->vicini[edge->u]; neighbour != NULL; neighbour = neighbour->next)
+    {
+        if (neighbour->id == edge->v)
+        {
+            neighbour->msf = false;
+            break;
+        }
+    }
+
+    for (elemento *neighbour = graph->vicini[edge->v]; neighbour != NULL; neighbour = neighbour->next)
+    {
+        if (neighbour->id == edge->u)
+        {
+            neighbour->msf = false;
+            break;
+        }
+    }
 }

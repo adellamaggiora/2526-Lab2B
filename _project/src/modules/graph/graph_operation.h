@@ -19,7 +19,9 @@ typedef struct graph_operation {
 } graph_operation;
 
 
-int add_edge(grafo *graph, int u, int v, int w);
+bool add_edge(grafo *graph, int u, int v, int w);
+
+bool remove_edge(grafo *graph, int u, int v);
 
 
 

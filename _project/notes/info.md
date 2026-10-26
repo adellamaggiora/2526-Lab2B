@@ -20,7 +20,7 @@
     Con una union i campi i, f e c occupano la stessa memoria.
     La union avrà dimensione sufficiente a contenere il campo più grande (più eventuale padding).
 
-- ricorda precondizioni e postcondizioni all'inizio e la fine delle funzioni con `assert`
+- usa `assert` per precondizioni, postcondizioni e invarianti interne che segnalano errori di programmazione; valida gli input con controlli normali
 
 - i nomi delle variabili e delle funzioni sono in formato `snake_case`
 
@@ -216,6 +216,15 @@ e restituisce l'errore al sistema operativo
 
 - la memoria va liberata con l'utilizzo di `free()` solo per la memoria ottenuta con `malloc`, `calloc` o `realloc`
 
+- `free(edge)` libera il blocco di memoria puntato, ma non imposta `edge` a `NULL`: da quel momento non puoi più accedere all'arco tramite quel puntatore. `edge = NULL`, invece, modifica solo il puntatore e non libera memoria; se perdi l'ultimo riferimento al blocco prima di liberarlo, hai un memory leak. Quando serve mantenere la variabile dopo la liberazione:
+
+    ```c
+    free(edge);
+    edge = NULL;
+    ```
+
+- assegnare `NULL` a un puntatore non aggiorna gli altri puntatori allo stesso oggetto: dopo `free` questi restano pendenti (dangling pointers). Nel grafo devi scollegare l'arco dalla lista della hash prima di liberarlo; `free(edge)` non aggiorna automaticamente la hash o le liste di adiacenza. Se `edge` è un parametro passato per valore, `edge = NULL` modifica soltanto la copia locale. `free(NULL)` è consentito e non fa nulla.
+
 - operatori per l'allocazione di memoria
     - `malloc`: alloca un blocco di memoria senza pulirlo
     - `calloc`: alloca la memoria e la azzera completamente (imposta ogni byte a zero)
@@ -233,9 +242,19 @@ ad esempio
     ```
     `p` è una variabile che occupa un unico blocco di memoria che contiene i campi della `struct` in ordine, in questo caso un `int` e un ``char`
 
-- un array è un blocco di elementi consecutivi `int a[3] = {10, 20, 30}`. Il nome `a`, nella maggior parte delle espressioni, viene convertito nell'indirizzo del primo elemento: `&a[0]`. Con `malloc`, invece si ottiene sempre un puntatore a un blocco di memoria allocato dinamicamente, in questo caso non è possibile conoscerne la lunghezza
+- un array è un blocco di elementi consecutivi `int a[3] = {10, 20, 30}`. Il nome `a`, nella maggior parte delle espressioni, viene convertito nell'indirizzo del primo elemento: `&a[0]`. Con `malloc` si ottiene un puntatore a un blocco di memoria dinamica: il puntatore da solo non contiene la lunghezza, che va conservata separatamente.
 
 - array vs puntatore: ad esempio `arco *edge_list` è un puntatore a un arco, quindi serve memoria per un solo indirizzo, mentre `arco edge_list[10]` serve memoria per 10 `struct` di tipo `arco`. Un array quando viene passato a una funzione "decade" a puntatore, ovvero viene passato l'indirizzo del primo elemento
+
+- anche un puntatore al primo elemento di un array può essere usato con gli indici: `p[i]` equivale a `*(p + i)`. Non serve che l'array sia dichiarato con `[]`: può essere allocato con `malloc` o `calloc`. Il puntatore deve essere valido e l'indice nei limiti; `[3]` indica il quarto elemento, quindi devono esserci almeno quattro elementi. C non controlla automaticamente i limiti.
+
+    ```c
+    bfs_node *nodes = bfs(graph, u, true);
+    bool reached = nodes[3].visited; // valido se graph->node_count > 3
+    free(nodes);
+    ```
+
+- un puntatore non indica da solo se punta a un singolo oggetto, a un array o alla testa di una lista concatenata. In una lista concatenata i nodi possono essere sparsi in memoria: per raggiungere i successori devi seguire `next`; `head[3]` non equivale al quarto nodo della lista.
 
 - con il passaggio per valore a una funzione viene creata una copia lcoale della struct, tipicamente nello stacj frame della funzione, quindi quella copia cessa di esistere quando la funzione termina.
     Quindi il vantaggio del puntatore è soprattutto:
@@ -251,6 +270,14 @@ ad esempio
 
 
 ## Gestione errori in C
+
+- `assert(condizione)` (da `<assert.h>`) serve per condizioni che devono essere sempre vere in un programma corretto: se sono false, c'è un errore di programmazione. Esempio: `assert(graph != NULL)` in una funzione interna che richiede un grafo valido. Se la condizione è falsa, stampa una diagnosi su `stderr` e chiama `abort`, terminando l'intero programma; se è vera, prosegue.
+
+- usa un normale `if` per input non validi, arco non trovato, file non apribile o allocazione fallita: sono situazioni previste da gestire restituendo un esito o terminando con un errore esplicativo secondo le specifiche. Esempio: `if (edge == NULL) return false;` quando una ricerca può non trovare l'arco.
+
+- gli `assert` vengono rimossi compilando con `-DNDEBUG`: non usarli per validare gli input o eseguire operazioni necessarie. La loro condizione non deve avere effetti collaterali, come modificare il grafo o chiamare una funzione che deve comunque essere eseguita.
+
+- `return false;` esce soltanto dalla funzione corrente e restituisce un esito al chiamante, che decide come proseguire. `printf`/`fprintf` stampano un messaggio ma non interrompono il normale flusso del programma. Un `assert` fallito, invece, termina tutto il programma: segnala un bug, non un normale esito negativo.
 
 - in C gli errori vengono spesso rappresentati come valori di ritorno e propagati manualmente.
 Non vengono "lanciati" automaticamente come le eccezioni Javascript

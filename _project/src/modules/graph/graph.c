@@ -1,18 +1,8 @@
 #include "graph/graph.h"
-#include "graph/hash.h"
+#include "data_structures/circular_buffer.h"
 #include "utils/error-manager.h"
 #include <assert.h>
 #include <stdlib.h>
-#include "data_structures/circular_buffer.h"
-
-static int compare_edges(const void *x, const void *y)
-{
-    // arrivano puntatori a puntatori (invocazione da compare_edges)
-    arco *e1 = *(arco **)x;
-    arco *e2 = *(arco **)y;
-
-    return (e1->weight > e2->weight) - (e1->weight < e2->weight);
-}
 
 // passo puntatore alla testa per poterla modificare
 static void insert_vicino_sorted_by_id(elemento **head, int id, int weight, bool msf)
@@ -25,7 +15,7 @@ static void insert_vicino_sorted_by_id(elemento **head, int id, int weight, bool
     new_element->msf = msf;
     new_element->next = NULL;
 
-    // inserisco prima del primo vicino con id >= id.
+    // inserisco prima del primo vicino con id >= id
     while (*head != NULL && (*head)->id < id)
     {
         head = &((*head)->next);
@@ -33,6 +23,21 @@ static void insert_vicino_sorted_by_id(elemento **head, int id, int weight, bool
 
     new_element->next = *head;
     *head = new_element;
+}
+
+static void remove_vicino(elemento **head, int id)
+{
+    while (*head != NULL && (*head)->id != id)
+    {
+        head = &((*head)->next);
+    }
+
+    if (*head != NULL)
+    {
+        elemento *removed = *head;
+        *head = removed->next;
+        free(removed);
+    }
 }
 
 arco *build_edge(int u, int v, int w)
@@ -84,13 +89,6 @@ void free_graph(grafo *graph)
     free(graph);
 }
 
-void sort_edge_pointers_list_by_weight(arco **edge_pointers_list, int list_length)
-{
-
-    // qsort chiama compare_edges passando gli indirizzi di ciò che è contenuto nell'array
-    qsort(edge_pointers_list, list_length, sizeof(arco *), &compare_edges);
-}
-
 arco **get_edge_pointers_list(grafo *graph)
 {
     arco **list = checked_malloc(graph->edge_count * sizeof(arco *));
@@ -130,13 +128,22 @@ void add_vicini(grafo *graph, const arco *edge)
         edge->msf);
 }
 
-// restituisce l'arco massimo sul cammino da u a v nell'albero di copertura minimo
-arco *find_max_edge_on_mst_path(grafo *graph, int u, int v)
+// rimuove u dai vicini di v e viceversa
+void remove_vicini(grafo *graph, const arco *edge)
 {
     assert(graph != NULL);
-    assert(u >= 0 && u < graph->node_count);
-    assert(v >= 0 && v < graph->node_count);
-    arco *result = NULL;
+    assert(graph->vicini != NULL);
+    assert(edge != NULL);
+
+    remove_vicino(&graph->vicini[edge->u], edge->v);
+    remove_vicino(&graph->vicini[edge->v], edge->u);
+}
+
+bfs_node *bfs(const grafo *graph, int start, bool only_msf)
+{
+    assert(graph != NULL);
+    assert(graph->vicini != NULL);
+    assert(start >= 0 && start < graph->node_count);
 
     bfs_node *nodes = checked_calloc(graph->node_count, sizeof(bfs_node));
 
@@ -145,21 +152,21 @@ arco *find_max_edge_on_mst_path(grafo *graph, int u, int v)
 
     // visited = true appena va nella coda
     // (anche prima di fare la pop)
-    nodes[u].visited = true;
-    circular_buffer_push(&queue, &u);
+    nodes[start].visited = true;
+    nodes[start].parent = -1;
+    circular_buffer_push(&queue, &start);
 
-    while (!circular_buffer_is_empty(&queue) && !nodes[v].visited)
+    while (!circular_buffer_is_empty(&queue))
     {
         int node;
         circular_buffer_pop(&queue, &node);
 
         elemento *neighbour = graph->vicini[node];
-
         while (neighbour != NULL)
         {
             int neighbour_id = neighbour->id;
 
-            if (neighbour->msf && nodes[neighbour_id].visited == false)
+            if ((!only_msf || neighbour->msf) && nodes[neighbour_id].visited == false)
             {
                 nodes[neighbour_id].visited = true;
                 nodes[neighbour_id].parent = node;
@@ -171,35 +178,6 @@ arco *find_max_edge_on_mst_path(grafo *graph, int u, int v)
         }
     }
 
-    // se v e' raggiungibile cerco l'arco massimo risalendo i parent
-    if (nodes[v].visited && u != v)
-    {
-        int max_node = v;
-        for (int node = v; node != u; node = nodes[node].parent)
-        {
-            if (nodes[node].weight > nodes[max_node].weight)
-                max_node = node;
-        }
-
-        int x = nodes[max_node].parent;
-        int y = max_node;
-        // nella hash gli archi hanno sempre u < v
-        if (x > y)
-        {
-            int tmp = x;
-            x = y;
-            y = tmp;
-        }
-        result = find_edge_in_hash_table(x, y, graph->gHash, graph->gHash_length);
-    }
-
     circular_buffer_destroy(&queue);
-    free(nodes);
-
-    return result;
-}
-
-// sia nell'array vicini che nella tabella hash
-void remove_edge_from_msf()
-{
+    return nodes;
 }

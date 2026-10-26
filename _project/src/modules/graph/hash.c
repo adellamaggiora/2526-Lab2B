@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <math.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include "graph/graph.h"
 #include "graph/hash.h"
 
@@ -9,7 +10,7 @@
 // private
 
 static int edge_hash_index(int u, int v, int hash_table_length)
-{
+{ 
     // 31 numero primo
     size_t hash = u * 31 + v;
     return hash % hash_table_length;
@@ -29,20 +30,42 @@ int hash_table_length(int edge_count, double load_factor)
     return (int)hash_table_length;
 }
 
-arco *find_edge_in_hash_table(int u, int v, arco **hash_table, int hash_table_length)
+arco *find_edge_in_hash_table(arco **hash_table, int hash_table_length, int u, int v, arco **previous)
 {
     int edge_index = edge_hash_index(u, v, hash_table_length);
     arco *edge = hash_table[edge_index];
+    arco *prev = NULL;
 
     while (edge != NULL && (edge->u != u || edge->v != v))
     {
+        prev = edge;
         edge = edge->next;
     }
+
+    if (previous != NULL)
+        *previous = prev;
 
     return edge;
 }
 
-arco *insert_edge_into_hash_table(int u, int v, int w, arco **hash_table, int hash_table_length) {
+void remove_edge_from_hash_table(arco **hash_table, int hash_table_length, arco *edge, arco *previous)
+{
+    int edge_index = edge_hash_index(edge->u, edge->v, hash_table_length);
+
+    // edge e' la testa della lista concatenata
+    if (previous == NULL)
+    {
+        hash_table[edge_index] = edge->next;
+    }
+    else
+    {
+        previous->next = edge->next;
+    }
+
+    free(edge);
+}
+
+arco *insert_edge_into_hash_table(arco **hash_table, int hash_table_length, int u, int v, int w) { 
     int edge_index = edge_hash_index(u, v, hash_table_length);
     arco *new_edge = build_edge(u, v, w);
     arco *current_edge = hash_table[edge_index];
@@ -65,4 +88,3 @@ arco *insert_edge_into_hash_table(int u, int v, int w, arco **hash_table, int ha
 
     return new_edge;
 }
-

@@ -62,7 +62,7 @@ grafo *parse_graph(FILE *file)
             {
                 terminate("Invalid edge");
             }
-            insert_edge_into_hash_table(u, v, w, graph->gHash, graph->gHash_length);
+            insert_edge_into_hash_table(graph->gHash, graph->gHash_length, u, v, w);
             break;
         default:
             discard_rest_of_line(file);
