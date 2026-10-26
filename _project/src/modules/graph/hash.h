@@ -8,4 +8,6 @@ int hash_table_length(int edge_count, double load_factor);
 
 arco *insert_edge_into_hash_table(int u, int v, int w, arco **hash_table, int hash_table_length);
 
+arco *find_edge_in_hash_table(int u, int v, arco **hash_table, int hash_table_length);
+
 #endif

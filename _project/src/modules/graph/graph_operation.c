@@ -3,7 +3,6 @@
 #include <components.h>
 #include <error-manager.h>
 #include "debug.h"
-#include <stdlib.h>
 
 
 int add_edge(grafo *graph, int u, int v, int w)
@@ -31,17 +30,17 @@ int add_edge(grafo *graph, int u, int v, int w)
     else
     {
         // bfs fino da u a v nell'mst
-        bsf_result bsf = bfs_on_mst(graph, u, v);
+        arco *max_edge = find_max_edge_on_mst_path(graph, u, v);
         // se il peso del nuovo arco (u, v, w) 
         // è minore del peso max di un arco nel cammino allora lo sostituisco
 
-
-        debug_print_list(bsf.path, bsf.path_length, sizeof(int), debug_print_int);
-        free(bsf.path);
+        if (max_edge != NULL)
+            debug_print_edge(max_edge);
     }
 
     return 1;
 }
+
 
 void remove_edge()
 {

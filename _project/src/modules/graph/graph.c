@@ -1,4 +1,5 @@
 #include "graph/graph.h"
+#include "graph/hash.h"
 #include "utils/error-manager.h"
 #include <assert.h>
 #include <stdlib.h>
@@ -129,26 +130,25 @@ void add_vicini(grafo *graph, const arco *edge)
         edge->msf);
 }
 
-// restituisce il path da u a v nell'albero di copertura minimo
-bsf_result bfs_on_mst(grafo *graph, int u, int v)
+// restituisce l'arco massimo sul cammino da u a v nell'albero di copertura minimo
+arco *find_max_edge_on_mst_path(grafo *graph, int u, int v)
 {
     assert(graph != NULL);
-    bsf_result result = {0, NULL};
+    assert(u >= 0 && u < graph->node_count);
+    assert(v >= 0 && v < graph->node_count);
+    arco *result = NULL;
 
-    bfs_node *nodes = checked_malloc(graph->node_count * sizeof(bfs_node));
-
-    for (int i = 0; i < graph->node_count; i++)
-    {
-        nodes[i] = (bfs_node){false, -1};
-    }
+    bfs_node *nodes = checked_calloc(graph->node_count, sizeof(bfs_node));
 
     circular_buffer queue;
     circular_buffer_init(&queue, graph->node_count, sizeof(int));
 
+    // visited = true appena va nella coda
+    // (anche prima di fare la pop)
     nodes[u].visited = true;
     circular_buffer_push(&queue, &u);
 
-    while (!circular_buffer_is_empty(&queue))
+    while (!circular_buffer_is_empty(&queue) && !nodes[v].visited)
     {
         int node;
         circular_buffer_pop(&queue, &node);
@@ -163,6 +163,7 @@ bsf_result bfs_on_mst(grafo *graph, int u, int v)
             {
                 nodes[neighbour_id].visited = true;
                 nodes[neighbour_id].parent = node;
+                nodes[neighbour_id].weight = neighbour->w;
                 circular_buffer_push(&queue, &neighbour_id);
             }
 
@@ -170,36 +171,31 @@ bsf_result bfs_on_mst(grafo *graph, int u, int v)
         }
     }
 
-    // se v non `e raggiungibile
-    if (!nodes[v].visited)
+    // se v e' raggiungibile cerco l'arco massimo risalendo i parent
+    if (nodes[v].visited && u != v)
     {
-        circular_buffer_destroy(&queue);
-        free(nodes);
-        return result;
-    }
+        int max_node = v;
+        for (int node = v; node != u; node = nodes[node].parent)
+        {
+            if (nodes[node].weight > nodes[max_node].weight)
+                max_node = node;
+        }
 
-    int node = v;
-    result.path_length = 1;
-
-    while (node != u)
-    {
-        node = nodes[node].parent;
-        result.path_length++;
-    }
-
-    result.path = checked_malloc(result.path_length * sizeof(int));
-    node = v;
-
-    for (int i = result.path_length - 1; i >= 0; i--)
-    {
-        result.path[i] = node;
-        node = nodes[node].parent;
+        int x = nodes[max_node].parent;
+        int y = max_node;
+        // nella hash gli archi hanno sempre u < v
+        if (x > y)
+        {
+            int tmp = x;
+            x = y;
+            y = tmp;
+        }
+        result = find_edge_in_hash_table(x, y, graph->gHash, graph->gHash_length);
     }
 
     circular_buffer_destroy(&queue);
     free(nodes);
 
-    // risultato copiato al chiamante (struct)
     return result;
 }
 

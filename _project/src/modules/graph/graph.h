@@ -62,14 +62,9 @@ typedef struct bfs_node
 {
     bool visited;
     int parent;
+    // peso dell'arco che collega il nodo al parent
+    int weight;
 } bfs_node;
-
-
-typedef struct bsf_result
-{
-    int path_length;
-    int *path;
-} bsf_result;
 
 
 
@@ -90,8 +85,9 @@ void sort_edge_pointers_list_by_weight(arco **edge_pointers_list, int list_lengt
 void add_vicini(grafo *graph, const arco *edge);
 
 
-// il chiamante deve liberare il path restituito con free
-bsf_result bfs_on_mst(grafo *graph, int u, int v);
+// restituisce l'arco massimo del cammino nella MSF, oppure NULL se non ci sono archi
+// l'arco appartiene al grafo e non deve essere liberato dal chiamante
+arco *find_max_edge_on_mst_path(grafo *graph, int u, int v);
 
 
 

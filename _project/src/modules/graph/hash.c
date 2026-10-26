@@ -29,6 +29,19 @@ int hash_table_length(int edge_count, double load_factor)
     return (int)hash_table_length;
 }
 
+arco *find_edge_in_hash_table(int u, int v, arco **hash_table, int hash_table_length)
+{
+    int edge_index = edge_hash_index(u, v, hash_table_length);
+    arco *edge = hash_table[edge_index];
+
+    while (edge != NULL && (edge->u != u || edge->v != v))
+    {
+        edge = edge->next;
+    }
+
+    return edge;
+}
+
 arco *insert_edge_into_hash_table(int u, int v, int w, arco **hash_table, int hash_table_length) {
     int edge_index = edge_hash_index(u, v, hash_table_length);
     arco *new_edge = build_edge(u, v, w);
