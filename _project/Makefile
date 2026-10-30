@@ -1,7 +1,7 @@
 CC := gcc
 
 CPPFLAGS := -Isrc/modules -Isrc/modules/concurrency -Isrc/modules/graph -Isrc/modules/utils
-CFLAGS := -O3 -Wall -Wextra -Werror=vla -std=gnu11 -pthread
+CFLAGS := -O0 -g -Wall -Wextra -Werror=vla -std=gnu11 -pthread
 LDFLAGS := -pthread
 LDLIBS := -lm
 

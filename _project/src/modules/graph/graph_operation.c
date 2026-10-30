@@ -4,6 +4,8 @@
 #include <components.h>
 #include <error-manager.h>
 #include "debug.h"
+#include <stdlib.h>
+
 
 bool add_edge(grafo *graph, int u, int v, int w)
 {
@@ -87,11 +89,14 @@ bool remove_edge(grafo *graph, int u, int v)
         
         // se elimino un arco che appartiene al MST allora la cCon potrebbe cambiare
 
-        // u = 2, v = 4
-        bfs_node *Lu = bfs(graph, u, true);
+        fprintf(stderr, "\n \n \n hello \n");
+
+        // u = 2
+        bfs_node *Lu = bfs(graph, u, false);
 
         debug_print_array(Lu, graph->node_count, sizeof(bfs_node), debug_print_bfs_node);
 
+        // v = 4
         // bfs_node *Lv = bfs(graph, v, true);
 
         free(Lu);

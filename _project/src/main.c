@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
     mst_kruskal(graph);
 
-    // debug_print_hash_table(graph->gHash, graph->gHash_length);
+    debug_print_hash_table(graph->gHash, graph->gHash_length);
     // fprintf(stderr, "edge count: %d numCoCo: %d costoMSF: %ld\n",
     //         graph->edge_count, graph->numCoCo, graph->costoMSF);
 
