@@ -35,6 +35,14 @@ void debug_print_uf_node(uf_node *node)
             node->parent ? node->parent->id : -1);
 }
 
+void debug_print_bfs_node(bfs_node *node)
+{
+    fprintf(stderr, "->(visited %d, parent %d, weigth %d)\n",
+            node->visited? 1 : 0,
+            node->parent,
+            node->weight);
+}
+
 // prende una funzione come parametro
 void debug_print_pointer(void *pointer, void (*printer_function)(void *elem))
 {
@@ -44,28 +52,28 @@ void debug_print_pointer(void *pointer, void (*printer_function)(void *elem))
     }
 }
 
-void debug_print_pointer_list(
-    void **list,
-    size_t list_length,
+void debug_print_pointer_array(
+    void **array,
+    size_t array_length,
     void (*printer_function)(void *elem))
 {
-    for (size_t i = 0; i < list_length; i++)
+    for (size_t i = 0; i < array_length; i++)
     {
-        void *pointer = list[i];
+        void *pointer = array[i];
         debug_print_pointer(pointer, printer_function);
     }
 }
 
-void debug_print_list(
-    void *list,
-    size_t list_length,
+void debug_print_array(
+    void *array,
+    size_t array_length,
     size_t elem_size,
     void (*printer_function)(void *elem))
 {
     // char = 1 byte -> posso spostare facilmente il puntatore di elem_size byte
-    char *ptr = list;
+    char *ptr = array;
 
-    for (size_t i = 0; i < list_length; i++)
+    for (size_t i = 0; i < array_length; i++)
     {
         printer_function(ptr);
         ptr += elem_size;

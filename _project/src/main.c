@@ -25,11 +25,17 @@ int main(int argc, char *argv[])
     mst_kruskal(graph);
 
     // debug_print_hash_table(graph->gHash, graph->gHash_length);
-    fprintf(stderr, "edge count: %d numCoCo: %d costoMSF: %ld\n",
-            graph->edge_count, graph->numCoCo, graph->costoMSF);
+    // fprintf(stderr, "edge count: %d numCoCo: %d costoMSF: %ld\n",
+    //         graph->edge_count, graph->numCoCo, graph->costoMSF);
 
     // add_edge(graph, 1, 3, 3);
     // debug_print_hash_table(graph->gHash, graph->gHash_length);
+
+
+    remove_edge(graph, 2, 4); // nella MSF, peso 2
+    // remove_edge(graph, 5, 6); // fuori dalla MSF, peso 20
+    // remove_edge(graph, 0, 1); // componenti diverse: arco inesistente, restituisce false    
+
 
     free_graph(graph);
     return EXIT_SUCCESS;

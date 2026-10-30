@@ -37,7 +37,7 @@ void mst_kruskal(grafo *graph)
 {
     arco **edge_list = get_edge_pointers_list(graph);
     sort_edge_pointers_list_by_weight(edge_list, graph->edge_count);
-    // debug_print_pointer_list(edge_list, graph->edge_count, debug_print_edge);
+    // debug_print_pointer_array(edge_list, graph->edge_count, debug_print_edge);
 
     
     uf_node *uf_node_list = checked_malloc(graph->node_count * sizeof(uf_node));

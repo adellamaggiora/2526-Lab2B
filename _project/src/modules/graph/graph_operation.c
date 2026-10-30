@@ -79,6 +79,27 @@ bool remove_edge(grafo *graph, int u, int v)
     else
     {
         // cancellazione di un arco della MSF ancora da implementare
+
+        
+        remove_vicini(graph, edge);
+        remove_edge_from_hash_table(graph->gHash, graph->gHash_length, edge, previous);
+        graph->edge_count--;
+        
+        // se elimino un arco che appartiene al MST allora la cCon potrebbe cambiare
+
+        // u = 2, v = 4
+        bfs_node *Lu = bfs(graph, u, true);
+
+        debug_print_array(Lu, graph->node_count, sizeof(bfs_node), debug_print_bfs_node);
+
+        // bfs_node *Lv = bfs(graph, v, true);
+
+        free(Lu);
+
+
+
+
+
         return false;
     }
 }

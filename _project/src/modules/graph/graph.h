@@ -58,7 +58,9 @@ typedef struct grafo
 } grafo;
 
 
-// usato in un array: l'indice e' in biezione con l'id del nodo, quindi non serve next
+// usato in un array: 
+// l'indice e' in biezione con l'id del nodo, quindi non serve next
+// la lunghezza è graph->node_count
 typedef struct bfs_node
 {
     bool visited;

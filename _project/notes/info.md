@@ -204,6 +204,10 @@ e restituisce l'errore al sistema operativo
     - **Static/global lifetime**: memoria statica o globale; non si libera con `free`.
     - **Stack ownership**: variabili locali automatiche; vengono distrutte automaticamente uscendo dallo scope
 
+- **Stack e heap**: le variabili locali automatiche (senza `static`), tipicamente sullo stack, cessano di esistere uscendo dal loro blocco o dalla funzione. La memoria dinamica sullo heap, ottenuta con `malloc`/`calloc`, può invece sopravvivere al ritorno della funzione: resta allocata finché non viene liberata. Per questo puoi restituire un puntatore a memoria dinamica, ma non l'indirizzo di una variabile locale automatica.
+
+- un puntatore locale e il blocco puntato hanno durate distinte: in `arco *edge = checked_malloc(sizeof(*edge));`, la variabile `edge` è automatica, mentre l'arco è sullo heap. Uscire dalla funzione non libera l'arco; devi conservarne l'indirizzo per poterlo usare e liberare successivamente.
+
 - il seguente codice dichiara un VLA (Variable Length Array): la dimensione viene calcolata a run-time. È valido nei compilatori C che supportano i VLA, ma non rispetta il requisito del progetto:
 ```c    
     int total_nodes = max_node_index + 1;
