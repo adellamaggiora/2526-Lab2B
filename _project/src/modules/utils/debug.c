@@ -20,6 +20,12 @@ void debug_print_int(void *element)
     fprintf(stderr, "%d \n", *(int *)element);
 }
 
+
+void debug_print_bool(void *element)
+{
+    fprintf(stderr, "%d \n", *(bool *)element);
+}
+
 void debug_print_edge(arco *edge)
 {
     fprintf(stderr, "->(u %d, v %d, w %d, msf %s)\n",
@@ -35,13 +41,15 @@ void debug_print_uf_node(uf_node *node)
             node->parent ? node->parent->id : -1);
 }
 
-void debug_print_bfs_node(bfs_node *node)
-{
-    fprintf(stderr, "->(visited %d, parent %d, weigth %d)\n",
-            node->visited? 1 : 0,
-            node->parent,
-            node->weight);
-}
+// void debug_print_bfs_node(bfs_node *node)
+// {
+//     fprintf(stderr, "->(visited %d, parent %d, weigth %d)\n",
+//             node->visited? 1 : 0,
+//             node->parent,
+//             node->weight);
+// }
+
+
 
 // prende una funzione come parametro
 void debug_print_pointer(void *pointer, void (*printer_function)(void *elem))

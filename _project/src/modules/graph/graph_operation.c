@@ -6,7 +6,6 @@
 #include "debug.h"
 #include <stdlib.h>
 
-
 bool add_edge(grafo *graph, int u, int v, int w)
 {
     // se gli identificatori dei nodi non sono validi
@@ -80,30 +79,37 @@ bool remove_edge(grafo *graph, int u, int v)
     }
     else
     {
-        // cancellazione di un arco della MSF ancora da implementare
 
-        
         remove_vicini(graph, edge);
         remove_edge_from_hash_table(graph->gHash, graph->gHash_length, edge, previous);
         graph->edge_count--;
-        
+
         // se elimino un arco che appartiene al MST allora la cCon potrebbe cambiare
 
-        fprintf(stderr, "\n \n \n hello \n");
+        fprintf(stderr, "\n \n \n REMOVING EDGE (%d, %d) \n \n \n", u, v);
 
-        // u = 2
-        bfs_node *Lu = bfs(graph, u, false);
+        bool *Lu = bfs(graph, u, true);
 
-        debug_print_array(Lu, graph->node_count, sizeof(bfs_node), debug_print_bfs_node);
+        // debug_print_array(Lu, graph->node_count, sizeof(bool), &debug_print_bool);
 
-        // v = 4
-        // bfs_node *Lv = bfs(graph, v, true);
+        // for (size_t i = 0; i < graph->node_count; i++)
+        // {
+        //     bool el = Lu[i];
+        //     fprintf(stderr, "node: %d  visited: %d \n", i, el);
+        // }
+
+        bool *Lv = bfs(graph, v, true);
+
+        // debug_print_array(Lu, graph->node_count, sizeof(bool), &debug_print_bool);
+
+        // for (size_t i = 0; i < graph->node_count; i++)
+        // {
+        //     bool el = Lv[i];
+        //     fprintf(stderr, "node: %d  visited: %d \n", i, el);
+        // }
 
         free(Lu);
-
-
-
-
+        free(Lv);
 
         return false;
     }

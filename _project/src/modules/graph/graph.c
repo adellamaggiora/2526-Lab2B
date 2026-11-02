@@ -108,7 +108,7 @@ arco **get_edge_pointers_list(grafo *graph)
     return list;
 }
 
-// aggiunge u come vicino di v e viceversa
+
 void add_vicini(grafo *graph, const arco *edge)
 {
     assert(graph != NULL);
@@ -128,7 +128,7 @@ void add_vicini(grafo *graph, const arco *edge)
         edge->msf);
 }
 
-// rimuove u dai vicini di v e viceversa
+
 void remove_vicini(grafo *graph, const arco *edge)
 {
     assert(graph != NULL);
@@ -139,21 +139,21 @@ void remove_vicini(grafo *graph, const arco *edge)
     remove_vicino(&graph->vicini[edge->v], edge->u);
 }
 
-bfs_node *bfs(const grafo *graph, int start, bool only_msf)
+
+bool *bfs(const grafo *graph, int start, bool only_msf)
 {
     assert(graph != NULL);
     assert(graph->vicini != NULL);
     assert(start >= 0 && start < graph->node_count);
 
-    bfs_node *nodes = checked_calloc(graph->node_count, sizeof(bfs_node));
+    bool *nodes = checked_calloc(graph->node_count, sizeof(bool));
 
     circular_buffer queue;
     circular_buffer_init(&queue, graph->node_count, sizeof(int));
 
-    // visited = true appena va nella coda
-    // (anche prima di fare la pop)
-    nodes[start].visited = true;
-    nodes[start].parent = -1;
+    // è visitato (true) appena va nella coda
+    // (anche prima di fare la pop, non uso coplore grigio)
+    nodes[start] = true;
     circular_buffer_push(&queue, &start);
 
     while (!circular_buffer_is_empty(&queue))
@@ -161,20 +161,18 @@ bfs_node *bfs(const grafo *graph, int start, bool only_msf)
         int node;
         circular_buffer_pop(&queue, &node);
 
-        elemento *neighbour = graph->vicini[node];
-        while (neighbour != NULL)
+        elemento *neighbours_list = graph->vicini[node];
+        while (neighbours_list != NULL)
         {
-            int neighbour_id = neighbour->id;
+            int neighbour_id = neighbours_list->id;
 
-            if ((!only_msf || neighbour->msf) && nodes[neighbour_id].visited == false)
+            if ((!only_msf || neighbours_list->msf) && nodes[neighbour_id] == false)
             {
-                nodes[neighbour_id].visited = true;
-                nodes[neighbour_id].parent = node;
-                nodes[neighbour_id].weight = neighbour->w;
+                nodes[neighbour_id] = true;
                 circular_buffer_push(&queue, &neighbour_id);
             }
 
-            neighbour = neighbour->next;
+            neighbours_list = neighbours_list->next;
         }
     }
 

@@ -58,18 +58,6 @@ typedef struct grafo
 } grafo;
 
 
-// usato in un array: 
-// l'indice e' in biezione con l'id del nodo, quindi non serve next
-// la lunghezza è graph->node_count
-typedef struct bfs_node
-{
-    bool visited;
-    int parent;
-    // peso dell'arco che collega il nodo al parent
-    int weight;
-} bfs_node;
-
-
 // functions
 
 arco *build_edge(int u, int v, int w);
@@ -81,14 +69,14 @@ arco **get_edge_pointers_list(grafo *graph);
 void free_graph(grafo *graph);
 
 
+// aggiunge u come vicino di v e viceversa
 void add_vicini(grafo *graph, const arco *edge);
 
+// rimuove u dai vicini di v e viceversa
 void remove_vicini(grafo *graph, const arco *edge);
 
-// visita tutti i nodi raggiungibili
-// only_msf limita la visita agli archi della MSF
-// restituisce un array indicizzato per nodo, da liberare con free
-bfs_node *bfs(const grafo *graph, int start, bool only_msf);
+// l'indice dell'array è l'id del nodo, il valore booleano indica se è stato visitato oppure no
+bool *bfs(const grafo *graph, int start, bool only_msf);
 
 
 #endif

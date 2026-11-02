@@ -100,31 +100,31 @@ arco *find_max_edge_on_mst_path(grafo *graph, int u, int v)
     assert(v >= 0 && v < graph->node_count);
     arco *result = NULL;
 
-    bfs_node *nodes = bfs(graph, u, true);
+    // bfs_node *nodes = bfs(graph, u, true);
 
-    // se v e' raggiungibile cerco l'arco massimo risalendo i parent
-    if (nodes[v].visited && u != v)
-    {
-        int max_node = v;
-        for (int node = v; node != u; node = nodes[node].parent)
-        {
-            if (nodes[node].weight > nodes[max_node].weight)
-                max_node = node;
-        }
+    // // se v e' raggiungibile cerco l'arco massimo risalendo i parent
+    // if (nodes[v].visited && u != v)
+    // {
+    //     int max_node = v;
+    //     for (int node = v; node != u; node = nodes[node].parent)
+    //     {
+    //         if (nodes[node].weight > nodes[max_node].weight)
+    //             max_node = node;
+    //     }
 
-        int x = nodes[max_node].parent;
-        int y = max_node;
-        // nella hash gli archi hanno sempre u < v
-        if (x > y)
-        {
-            int tmp = x;
-            x = y;
-            y = tmp;
-        }
-        result = find_edge_in_hash_table(graph->gHash, graph->gHash_length, x, y, NULL);
-    }
+    //     int x = nodes[max_node].parent;
+    //     int y = max_node;
+    //     // nella hash gli archi hanno sempre u < v
+    //     if (x > y)
+    //     {
+    //         int tmp = x;
+    //         x = y;
+    //         y = tmp;
+    //     }
+    //     result = find_edge_in_hash_table(graph->gHash, graph->gHash_length, x, y, NULL);
+    // }
 
-    free(nodes);
+    // free(nodes);
 
     return result;
 }

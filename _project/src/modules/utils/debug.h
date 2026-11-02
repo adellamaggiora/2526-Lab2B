@@ -19,7 +19,9 @@ void debug_print_uf_node(uf_node *node);
 
 void debug_print_int(void *element);
 
-void debug_print_bfs_node(bfs_node *node);
+// void debug_print_bfs_node(bfs_node *node);
+
+void debug_print_bool(void *element);
 
 #endif
 
