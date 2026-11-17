@@ -63,3 +63,7 @@ dkms.conf
 
 #vs-code
 .vscode/
+
+# PDF and LaTeX files
+*.pdf
+*.tex

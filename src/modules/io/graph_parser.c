@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include "utils/xerrori.h"
+#include "graph/graph.h"
+#include "graph/hash.h"
+#include "io/parser_utils.h"
+
+/*
+    ******************************************
+    parser dei file con formato .gr
+    ******************************************
+
+    formato delle linee:
+
+    p sp <indice_massimo_nodi> <numero_archi>
+    c <commento>
+    a <u> <v> <peso>
+
+    //////////////////////////////////////////
+
+    - un nodo è identificabile con un numero
+
+    - ogni nodo è in biezione con un numero
+
+    - i nodi validi sono tutti quelli nell'intervallo 0..n
+
+    - se un nodo non compare in alcun arco, esiste comunque
+      ed è una componente isolata
+
+    ******************************************
+*/
+
+// valorizza le prop "gHash", "gHash_length", "node_count", "edge_count" del grafo
+grafo *parse_graph(FILE *file)
+{
+    assert(file != NULL);
+    char line_type;
+    grafo *graph = calloc(1, sizeof(*graph));
+    if (graph == NULL)
+        xtermina("Memory allocation failed", __LINE__, __FILE__);
+
+    // lo spazio iniziale ignora tutti gli spazi, tab e newline
+    // finché non viene trovato un carattere vero.
+    while (fscanf(file, " %c", &line_type) == 1)
+    {
+        switch (line_type)
+        {
+        case 'p':
+            int node_count, edge_count;
+            if (fscanf(file, " sp %d %d", &node_count, &edge_count) != 2)
+            {
+                xtermina("Invalid graph header", __LINE__, __FILE__);
+            }
+            graph->gHash_length = hash_table_length(edge_count, 0.6);
+            graph->node_count = node_count + 1;
+            graph->edge_count = edge_count;
+            graph->gHash = calloc(graph->gHash_length, sizeof(arco *));
+            if (graph->gHash == NULL)
+                xtermina("Memory allocation failed", __LINE__, __FILE__);
+
+            break;
+        case 'a':
+            int u, v, w;
+            if (fscanf(file, " %d %d %d", &u, &v, &w) != 3)
+            {
+                xtermina("Invalid edge", __LINE__, __FILE__);
+            }
+            insert_edge_into_hash_table(graph->gHash, graph->gHash_length, u, v, w);
+            break;
+        default:
+            discard_rest_of_line(file);
+            break;
+        }
+    }
+
+    return graph;
+}

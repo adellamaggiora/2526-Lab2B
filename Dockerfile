@@ -26,6 +26,6 @@ RUN apt-get update -o Acquire::Retries=5 \
 
 WORKDIR /workspace
 
-EXPOSE 5005
+EXPOSE 5000
 
 CMD ["/bin/bash"]
