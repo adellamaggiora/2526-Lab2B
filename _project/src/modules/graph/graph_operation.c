@@ -79,38 +79,67 @@ bool remove_edge(grafo *graph, int u, int v)
     }
     else
     {
-
+        graph->costoMSF -= edge->weight;
         remove_vicini(graph, edge);
         remove_edge_from_hash_table(graph->gHash, graph->gHash_length, edge, previous);
         graph->edge_count--;
 
         // se elimino un arco che appartiene al MST allora la cCon potrebbe cambiare
 
-        fprintf(stderr, "\n \n \n REMOVING EDGE (%d, %d) \n \n \n", u, v);
-
         bool *Lu = bfs(graph, u, true);
-
-        // debug_print_array(Lu, graph->node_count, sizeof(bool), &debug_print_bool);
-
-        // for (size_t i = 0; i < graph->node_count; i++)
-        // {
-        //     bool el = Lu[i];
-        //     fprintf(stderr, "node: %d  visited: %d \n", i, el);
-        // }
-
         bool *Lv = bfs(graph, v, true);
 
-        // debug_print_array(Lu, graph->node_count, sizeof(bool), &debug_print_bool);
+        // cerco l'arco di peso minimo che collega i due sottoalberi
+        arco *min_edge = NULL;
+        for (int i = 0; i < graph->node_count; i++)
+        {
+            if (!Lu[i])
+                continue;
 
-        // for (size_t i = 0; i < graph->node_count; i++)
-        // {
-        //     bool el = Lv[i];
-        //     fprintf(stderr, "node: %d  visited: %d \n", i, el);
-        // }
+            for (elemento *neighbour = graph->vicini[i]; neighbour != NULL; neighbour = neighbour->next)
+            {
+                if (Lv[neighbour->id] && (min_edge == NULL || neighbour->w < min_edge->weight))
+                {
+                    int x = i < neighbour->id ? i : neighbour->id;
+                    int y = i < neighbour->id ? neighbour->id : i;
+                    min_edge = find_edge_in_hash_table(graph->gHash, graph->gHash_length, x, y, NULL);
+                }
+            }
+        }
+
+        if (min_edge != NULL)
+        {
+            remove_vicini(graph, min_edge);
+            min_edge->msf = true;
+            add_vicini(graph, min_edge);
+            graph->costoMSF += min_edge->weight;
+        }
+        else
+        {
+            // i due sottoalberi diventano componenti connesse distinte
+            int min_u = u;
+            int min_v = v;
+            for (int i = 0; i < graph->node_count; i++)
+            {
+                if (Lu[i] && i < min_u)
+                    min_u = i;
+                if (Lv[i] && i < min_v)
+                    min_v = i;
+            }
+
+            for (int i = 0; i < graph->node_count; i++)
+            {
+                if (Lu[i])
+                    graph->cCon[i] = min_u;
+                if (Lv[i])
+                    graph->cCon[i] = min_v;
+            }
+            graph->numCoCo++;
+        }
 
         free(Lu);
         free(Lv);
 
-        return false;
+        return true;
     }
 }
