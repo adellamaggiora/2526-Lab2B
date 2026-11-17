@@ -3,14 +3,10 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-#include "concurrency/bounded_buffer.h"
+#include "graph/graph_operation.h"
 
 bool read_next_operation(
     FILE *file,
     graph_operation *operation);
-
-void produce_operations(
-    FILE *file,
-    bounded_buffer *buffer);
 
 #endif

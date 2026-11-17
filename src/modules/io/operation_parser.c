@@ -50,16 +50,3 @@ bool read_next_operation(
 
     return false;
 }
-
-void produce_operations(FILE *file, bounded_buffer *buffer)
-{
-    assert(file != NULL);
-    assert(buffer != NULL);
-
-    graph_operation operation;
-
-    while (read_next_operation(file, &operation))
-    {
-        enqueue_operation(buffer, operation);
-    }
-}

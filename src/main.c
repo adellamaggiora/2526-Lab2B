@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include "graph/msf.h"
 #include "io/graph_parser.h"
+#include "io/operation_parser.h"
 #include "graph/graph.h"
 #include "graph/graph_operation.h"
 #include "utils/xerrori.h"
@@ -18,13 +19,11 @@ int main(int argc, char *argv[])
     int nmutex = 1000;
 
 
-    const char *usage = "Uso: msf.out file_grafo file_archi [-t threads] [-H hashsize] [-M nmutex]";
-
     int option;
     while ((option = getopt(argc, argv, "t:H:M:")) != -1)
     {
         if (option == '?')
-            xtermina(usage, __LINE__, __FILE__);
+            xtermina("Parametro sconosciuto o valore mancante", __LINE__, __FILE__);
 
         int value = xpositive_int(optarg, __LINE__, __FILE__);
 
@@ -37,7 +36,7 @@ int main(int argc, char *argv[])
     }
 
     if (argc - optind != 2)
-        xtermina(usage, __LINE__, __FILE__);
+        xtermina("Sono richiesti esattamente due file: file_grafo e file_archi", __LINE__, __FILE__);
 
     char *filepath = argv[optind];
     char *operations_path = argv[optind + 1];
@@ -51,6 +50,14 @@ int main(int argc, char *argv[])
     // debug_print_hash_table(graph->gHash, graph->gHash_length);
 
     mst_kruskal(graph);
+
+    FILE *operations_file = xfopen(operations_path, "r", __LINE__, __FILE__);
+    graph_operation operation;
+    while (read_next_operation(operations_file, &operation))
+    {
+        // Per ora leggiamo soltanto l'operazione.
+    }
+    fclose(operations_file);
 
 
 
