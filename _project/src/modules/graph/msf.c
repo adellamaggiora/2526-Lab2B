@@ -100,31 +100,51 @@ arco *find_max_edge_on_mst_path(grafo *graph, int u, int v)
     assert(v >= 0 && v < graph->node_count);
     arco *result = NULL;
 
-    // bfs_node *nodes = bfs(graph, u, true);
+    int *parent = checked_malloc(graph->node_count * sizeof(int));
+    int *queue = checked_malloc(graph->node_count * sizeof(int));
+    for (int i = 0; i < graph->node_count; i++)
+        parent[i] = -1;
 
-    // // se v e' raggiungibile cerco l'arco massimo risalendo i parent
-    // if (nodes[v].visited && u != v)
-    // {
-    //     int max_node = v;
-    //     for (int node = v; node != u; node = nodes[node].parent)
-    //     {
-    //         if (nodes[node].weight > nodes[max_node].weight)
-    //             max_node = node;
-    //     }
+    int head = 0, tail = 0;
+    parent[u] = u;
+    queue[tail++] = u;
 
-    //     int x = nodes[max_node].parent;
-    //     int y = max_node;
-    //     // nella hash gli archi hanno sempre u < v
-    //     if (x > y)
-    //     {
-    //         int tmp = x;
-    //         x = y;
-    //         y = tmp;
-    //     }
-    //     result = find_edge_in_hash_table(graph->gHash, graph->gHash_length, x, y, NULL);
-    // }
+    // bfs considerando solo gli archi della MSF
+    while (head < tail && parent[v] == -1)
+    {
+        int node = queue[head++];
+        for (elemento *neighbour = graph->vicini[node]; neighbour != NULL; neighbour = neighbour->next)
+        {
+            if (neighbour->msf && parent[neighbour->id] == -1)
+            {
+                parent[neighbour->id] = node;
+                queue[tail++] = neighbour->id;
+            }
+        }
+    }
 
-    // free(nodes);
+    // se v e' raggiungibile cerco l'arco massimo risalendo i parent
+    if (parent[v] != -1)
+    {
+        for (int node = v; node != u; node = parent[node])
+        {
+            int x = parent[node];
+            int y = node;
+            // nella hash gli archi hanno sempre u < v
+            if (x > y)
+            {
+                int tmp = x;
+                x = y;
+                y = tmp;
+            }
+            arco *edge = find_edge_in_hash_table(graph->gHash, graph->gHash_length, x, y, NULL);
+            if (result == NULL || edge->weight > result->weight)
+                result = edge;
+        }
+    }
+
+    free(parent);
+    free(queue);
 
     return result;
 }
