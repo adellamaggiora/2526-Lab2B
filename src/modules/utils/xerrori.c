@@ -1,4 +1,5 @@
 #include "xerrori.h"
+#include <limits.h>
 
 // collezione di chiamate a funzioni di sistema con controllo output
 // i prototipi sono in xerrori.h
@@ -40,6 +41,15 @@ void xperror(int en, char *msg) {
 }
 
 
+
+int xpositive_int(const char *text, int linea, char *file) {
+  char *end;
+  errno = 0;
+  long value = strtol(text, &end, 10);
+  if (errno == ERANGE || end == text || *end != '\0' || value <= 0 || value > INT_MAX)
+    xtermina("Le opzioni richiedono interi positivi", linea, file);
+  return (int)value;
+}
 
 // ---------- operazioni su FILE *
 FILE *xfopen(const char *path, const char *mode, int linea, char *file) {

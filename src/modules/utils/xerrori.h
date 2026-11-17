@@ -23,6 +23,9 @@ void xtermina(const char *s, int linea, char *file);
 // invia messaggio d'errore su stderr
 void xperror(int en, char *msg);
 
+// conversione di una stringa in intero positivo con controllo
+int xpositive_int(const char *text, int linea, char *file);
+
 // operazioni su FILE *
 FILE *xfopen(const char *path, const char *mode, int linea, char *file);
 

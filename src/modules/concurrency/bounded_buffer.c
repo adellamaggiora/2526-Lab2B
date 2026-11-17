@@ -56,6 +56,8 @@ graph_operation dequeue_operation(bounded_buffer *buffer) {
     }
 
     graph_operation op;
+
+    
     bool extracted = circular_buffer_pop(&buffer->queue, &op);
     assert(extracted);
 
