@@ -1,42 +1,22 @@
 # Guida alla compilazione e debug del progetto
 
-## Ambiente di sviluppo con Docker Compose
+## Ambiente di sviluppo con Docker
 
-Dalla root del repository, al primo avvio:
-
-```bash
-docker compose up -d --build
-```
-
-Compose costruisce l'immagine dal `Dockerfile` e avvia il servizio `dev` in background. La cartella del progetto viene montata in `/workspace`: le modifiche ai sorgenti sono subito disponibili nel container. La porta 5000 di `gdbgui` viene pubblicata su `localhost`.
-
-Per gli avvii successivi basta:
+Dalla root del repository, creare l'immagine con gli strumenti di compilazione e debugging:
 
 ```bash
-docker compose up -d
+docker build . -t <image-name>
 ```
 
-Per entrare nella shell del container:
+Per avviare il container ed entrare direttamente nella shell:
 
 ```bash
-docker compose exec dev bash
+docker run -it --rm -v "${PWD}:/workspace" -p 5000:5000 <image-name>
 ```
 
-I comandi di compilazione, debugging e Valgrind descritti sotto vanno eseguiti in questa shell. Si possono anche eseguire direttamente dalla root del repository, ad esempio:
+Sostituire `<image-name>` con il nome scelto per l'immagine. La cartella del progetto viene montata in `/workspace`: le modifiche ai sorgenti sono subito disponibili nel container. La porta 5000 viene pubblicata per `gdbgui`.
 
-```bash
-docker compose exec dev make
-```
-
-Il container resta acceso anche dopo `exit` dalla shell. Per fermarlo e rimuoverlo:
-
-```bash
-docker compose down
-```
-
-I file del progetto restano sul computer. Dopo modifiche al `Dockerfile`, ripetere `docker compose up -d --build`; per modifiche ai soli sorgenti non serve ricostruire l'immagine.
-
-Riferimenti: [docker compose up](https://docs.docker.com/reference/cli/docker/compose/up/) e [docker compose exec](https://docs.docker.com/reference/cli/docker/compose/exec/).
+I comandi di compilazione, debugging e Valgrind descritti sotto vanno eseguiti in questa shell. Con `exit` il container si ferma e viene rimosso; i file del progetto restano sul computer. Ricostruire l'immagine solo dopo modifiche al `Dockerfile`.
 
 ## Guida alla compilazione
 
