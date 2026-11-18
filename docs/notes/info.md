@@ -202,6 +202,61 @@ e restituisce l'errore al sistema operativo
 
 - Un puntatore è un robottino sulla memoria: l’indirizzo dice da dove parte, il tipo decide quanto sono lunghi i suoi passi.
 
+## NULL e puntatori nulli
+
+- `NULL` è una macro definita dagli header standard, per esempio `<stddef.h>`. Nel C11 usato dal progetto rappresenta una **costante di puntatore nullo**: può essere definita, per esempio, come `0` oppure `((void *)0)`. Non è una variabile e non è un tipo.
+
+- Il tipo dell'espressione `NULL` dipende dalla definizione della macro. Quando viene assegnata a un puntatore, viene convertita nel valore nullo di quel tipo:
+
+    ```c
+    int *p = NULL;  // p è un puntatore a int, con valore nullo
+    ```
+
+- Un **puntatore nullo** non punta a nessun oggetto o funzione. Si usa per indicare un riferimento assente, la fine di una lista o un risultato non trovato, secondo il significato stabilito dal codice.
+
+- `p == NULL` controlla se il puntatore è nullo. Se lo è, non puoi accedere a memoria tramite `*p` o `p->campo`: sarebbe comportamento indefinito, spesso un segmentation fault.
+
+- Scrivere `p = NULL` non alloca e non libera memoria. Il valore nullo è garantito dal linguaggio, ma la sua rappresentazione in memoria non deve necessariamente essere composta da tutti bit a zero.
+
+- In una funzione del thread che restituisce `void *`, `return NULL;` restituisce un puntatore nullo come risultato: qui significa **nessun risultato da consegnare al chiamante**. È il `return` a terminare il thread, non il valore `NULL`.
+
+    ```c
+    if (operation.type == END_OPERATIONS)
+        return NULL;
+    ```
+
+- Nell'esempio, `END_OPERATIONS` è il messaggio estratto dalla coda che indica la fine del lavoro; `NULL` è invece il risultato restituito dal thread. Il main può recuperarne il valore con `pthread_join`; con `pthread_join(thread, NULL)` sceglie di non recuperarlo.
+
+## pthread_join e terminazione dei consumatori
+
+- `pthread_create` avvia un thread; `pthread_join` aspetta che quel thread termini. La `join` blocca soltanto il chiamante: nel progetto è il main ad aspettare, mentre gli altri consumatori possono continuare a lavorare. Se il thread è già terminato, l'attesa non serve e la chiamata può completarsi subito.
+
+- In `xpthread_join(consumers[i], NULL, __LINE__, __FILE__)`, `consumers[i]` identifica il thread da aspettare. `NULL` indica che non interessa recuperarne il risultato. `__LINE__` e `__FILE__` servono al nostro wrapper per indicare dove è avvenuto un eventuale errore.
+
+- Non fare la `join` dopo ogni normale `enqueue_operation`: un consumatore non termina dopo una singola operazione, ma continua a estrarre fino a `END_OPERATIONS`. Il main rimarrebbe bloccato ad aspettarlo senza poter produrre le operazioni successive e inviare il segnale di fine.
+
+- Anche i due cicli di invio dei terminatori e di `join` devono restare separati. Un `END_OPERATIONS` può essere estratto da **qualunque consumatore**, non necessariamente da `consumers[i]`. Se invii un solo terminatore e aspetti subito `consumers[0]`, potrebbe prenderlo `consumers[1]`: il primo rimarrebbe in attesa e il main non potrebbe più inviare gli altri terminatori.
+
+- L'ordine nel main è: leggere e accodare tutte le operazioni, accodare un terminatore per ogni consumatore, aspettare tutti i consumatori e infine liberare le risorse condivise.
+
+    ```c
+    graph_operation end = {.type = END_OPERATIONS};
+    for (int i = 0; i < threads; i++)
+    {
+        enqueue_operation(&buffer, end);
+    }
+
+    for (int i = 0; i < threads; i++)
+    {
+        xpthread_join(consumers[i], NULL, __LINE__, __FILE__);
+    }
+
+    free(consumers);
+    bounded_buffer_destroy(&buffer);
+    ```
+
+- Fare le `join` in un ciclo non rende sequenziale il lavoro dei consumatori: sono già stati avviati e lavorano in parallelo. Il main sta solo verificando che tutti abbiano terminato prima di distruggere il buffer o liberare il grafo.
+
 ## Gestione della memoria e allocazione dinamica
 
 - paradigmi per la gestione della memoria

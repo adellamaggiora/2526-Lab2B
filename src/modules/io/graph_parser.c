@@ -36,9 +36,7 @@ grafo *parse_graph(FILE *file)
 {
     assert(file != NULL);
     char line_type;
-    grafo *graph = calloc(1, sizeof(*graph));
-    if (graph == NULL)
-        xtermina("Memory allocation failed", __LINE__, __FILE__);
+    grafo *graph = checked_calloc(1, sizeof(*graph));
 
     // lo spazio iniziale ignora tutti gli spazi, tab e newline
     // finché non viene trovato un carattere vero.
@@ -55,9 +53,7 @@ grafo *parse_graph(FILE *file)
             graph->gHash_length = hash_table_length(edge_count, 0.6);
             graph->node_count = node_count + 1;
             graph->edge_count = edge_count;
-            graph->gHash = calloc(graph->gHash_length, sizeof(arco *));
-            if (graph->gHash == NULL)
-                xtermina("Memory allocation failed", __LINE__, __FILE__);
+            graph->gHash = checked_calloc(graph->gHash_length, sizeof(arco *));
 
             break;
         case 'a':

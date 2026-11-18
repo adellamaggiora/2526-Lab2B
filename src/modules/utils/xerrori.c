@@ -47,8 +47,33 @@ int xpositive_int(const char *text, int linea, char *file) {
   errno = 0;
   long value = strtol(text, &end, 10);
   if (errno == ERANGE || end == text || *end != '\0' || value <= 0 || value > INT_MAX)
-    xtermina("Le opzioni richiedono interi positivi", linea, file);
+    xtermina("Expected a positive integer", linea, file);
   return (int)value;
+}
+
+void *checked_malloc(size_t size) {
+  void *memory = malloc(size);
+  if (memory == NULL && size != 0)
+    termina("Memory allocation failed");
+  return memory;
+}
+
+void *checked_calloc(size_t count, size_t size) {
+  void *memory = calloc(count, size);
+  if (memory == NULL && count != 0 && size != 0)
+    termina("Memory allocation failed");
+  return memory;
+}
+
+void *checked_realloc(void *memory, size_t size) {
+  if (size == 0) {
+    free(memory);
+    return NULL;
+  }
+  void *result = realloc(memory, size);
+  if (result == NULL)
+    termina("Memory reallocation failed");
+  return result;
 }
 
 // ---------- operazioni su FILE *

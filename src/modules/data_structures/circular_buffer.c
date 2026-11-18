@@ -10,9 +10,7 @@ void circular_buffer_init(circular_buffer *buffer, int capacity, int element_siz
     assert(capacity > 0);
     assert(element_size > 0);
 
-    buffer->data = calloc(capacity, element_size);
-    if (buffer->data == NULL)
-        xtermina("Memory allocation failed", __LINE__, __FILE__);
+    buffer->data = checked_calloc(capacity, element_size);
     buffer->element_size = element_size;
     buffer->capacity = capacity;
     buffer->size = 0;

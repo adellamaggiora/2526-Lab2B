@@ -26,6 +26,12 @@ void xperror(int en, char *msg);
 // conversione di una stringa in intero positivo con controllo
 int xpositive_int(const char *text, int linea, char *file);
 
+// allocazione di memoria con controllo
+void *checked_malloc(size_t size);
+void *checked_calloc(size_t count, size_t size);
+// Con size == 0 libera memory e restituisce NULL.
+void *checked_realloc(void *memory, size_t size);
+
 // operazioni su FILE *
 FILE *xfopen(const char *path, const char *mode, int linea, char *file);
 

@@ -4,11 +4,28 @@
 #include "graph/msf.h"
 #include "io/graph_parser.h"
 #include "io/operation_parser.h"
+#include "concurrency/bounded_buffer.h"
 #include "graph/graph.h"
 #include "graph/graph_operation.h"
 #include "utils/xerrori.h"
 #include "utils/debug.h"
 
+
+static void *consume_operations(void *arg)
+{
+    bounded_buffer *buffer = arg;
+    while (true)
+    {
+        graph_operation operation = dequeue_operation(buffer);
+        // quando non ci sono più operazioni ritorno NULL
+        if (operation.type == END_OPERATIONS)
+        {
+            return NULL;
+        }
+
+        // Per ora estraiamo soltanto l'operazione, senza eseguirla.
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -23,7 +40,7 @@ int main(int argc, char *argv[])
     while ((option = getopt(argc, argv, "t:H:M:")) != -1)
     {
         if (option == '?')
-            xtermina("Parametro sconosciuto o valore mancante", __LINE__, __FILE__);
+            xtermina("Unknown option or missing argument", __LINE__, __FILE__);
 
         int value = xpositive_int(optarg, __LINE__, __FILE__);
 
@@ -36,7 +53,7 @@ int main(int argc, char *argv[])
     }
 
     if (argc - optind != 2)
-        xtermina("Sono richiesti esattamente due file: file_grafo e file_archi", __LINE__, __FILE__);
+        xtermina("Exactly two files are required: graph file and operations file", __LINE__, __FILE__);
 
     char *filepath = argv[optind];
     char *operations_path = argv[optind + 1];
@@ -52,12 +69,40 @@ int main(int argc, char *argv[])
     mst_kruskal(graph);
 
     FILE *operations_file = xfopen(operations_path, "r", __LINE__, __FILE__);
+
+    bounded_buffer buffer;
+    bounded_buffer_init(&buffer, 64);
+
+    // creazione dei consumatori
+    pthread_t *consumers = checked_malloc((size_t)threads * sizeof(*consumers));
+    for (int i = 0; i < threads; i++)
+    {
+        xpthread_create(&consumers[i], NULL, consume_operations, &buffer, __LINE__, __FILE__);
+    }
+
+    // produttore (main) che inserisce la prossima operazione
     graph_operation operation;
     while (read_next_operation(operations_file, &operation))
     {
-        // Per ora leggiamo soltanto l'operazione.
+        enqueue_operation(&buffer, operation);
     }
     fclose(operations_file);
+
+    // la coda vuota non significa necessariamente che un consumatore abbia finito
+    // occorre inserire un terminatore che permetta di fare la join
+    graph_operation end = {.type = END_OPERATIONS};
+    for (int i = 0; i < threads; i++)
+    {
+        enqueue_operation(&buffer, end);
+    }
+
+    for (int i = 0; i < threads; i++)
+    {
+        xpthread_join(consumers[i], NULL, __LINE__, __FILE__);
+    }
+
+    free(consumers);
+    bounded_buffer_destroy(&buffer);
 
 
 

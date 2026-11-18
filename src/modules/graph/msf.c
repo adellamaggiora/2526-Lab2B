@@ -40,9 +40,7 @@ void mst_kruskal(grafo *graph)
     // debug_print_pointer_array(edge_list, graph->edge_count, debug_print_edge);
 
     
-    uf_node *uf_node_list = malloc(graph->node_count * sizeof(uf_node));
-    if (uf_node_list == NULL)
-        xtermina("Memory allocation failed", __LINE__, __FILE__);
+    uf_node *uf_node_list = checked_malloc(graph->node_count * sizeof(uf_node));
 
     // iterazione sui nodi
     for (int i = 0; i < graph->node_count; i++)
@@ -53,9 +51,7 @@ void mst_kruskal(grafo *graph)
     graph->costoMSF = 0;
     // ogni nodo parte come componente a sè stante
     graph->numCoCo = graph->node_count;
-    graph->vicini = calloc(graph->node_count, sizeof(elemento *));
-    if (graph->vicini == NULL)
-        xtermina("Memory allocation failed", __LINE__, __FILE__);
+    graph->vicini = checked_calloc(graph->node_count, sizeof(elemento *));
 
     // iterazione su archi
     for (size_t i = 0; i < graph->edge_count; i++)
@@ -79,9 +75,7 @@ void mst_kruskal(grafo *graph)
         add_vicini(graph, edge);
     }
 
-    graph->cCon = calloc(graph->node_count, sizeof(int));
-    if (graph->cCon == NULL)
-        xtermina("Memory allocation failed", __LINE__, __FILE__);
+    graph->cCon = checked_calloc(graph->node_count, sizeof(int));
 
     // seconda iterazione su nodi perchè qui conosco le componenti (alberi uf_node)
     for (int i = 0; i < graph->node_count; i++)
@@ -106,10 +100,8 @@ arco *find_max_edge_on_mst_path(grafo *graph, int u, int v)
     assert(v >= 0 && v < graph->node_count);
     arco *result = NULL;
 
-    int *parent = malloc(graph->node_count * sizeof(int));
-    int *queue = malloc(graph->node_count * sizeof(int));
-    if (parent == NULL || queue == NULL)
-        xtermina("Memory allocation failed", __LINE__, __FILE__);
+    int *parent = checked_malloc(graph->node_count * sizeof(int));
+    int *queue = checked_malloc(graph->node_count * sizeof(int));
     for (int i = 0; i < graph->node_count; i++)
         parent[i] = -1;
 

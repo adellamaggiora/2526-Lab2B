@@ -6,7 +6,8 @@
 
 typedef enum graph_operation_type {
     ADD_EDGE,
-    REMOVE_EDGE
+    REMOVE_EDGE,
+    END_OPERATIONS
 } graph_operation_type;
 
 

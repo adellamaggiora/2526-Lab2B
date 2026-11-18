@@ -9,9 +9,7 @@ static void insert_vicino_sorted_by_id(elemento **head, int id, int weight, bool
 {
     assert(head != NULL);
 
-    elemento *new_element = malloc(sizeof(*new_element));
-    if (new_element == NULL)
-        xtermina("Memory allocation failed", __LINE__, __FILE__);
+    elemento *new_element = checked_malloc(sizeof(*new_element));
     new_element->id = id;
     new_element->w = weight;
     new_element->msf = msf;
@@ -46,9 +44,7 @@ arco *build_edge(int u, int v, int w)
 {
     // invariante
     assert(u < v);
-    arco *result = malloc(sizeof(arco));
-    if (result == NULL)
-        xtermina("Memory allocation failed", __LINE__, __FILE__);
+    arco *result = checked_malloc(sizeof(arco));
 
     result->u = u;
     result->v = v;
@@ -95,9 +91,7 @@ void free_graph(grafo *graph)
 
 arco **get_edge_pointers_list(grafo *graph)
 {
-    arco **list = malloc(graph->edge_count * sizeof(arco *));
-    if (list == NULL)
-        xtermina("Memory allocation failed", __LINE__, __FILE__);
+    arco **list = checked_malloc(graph->edge_count * sizeof(arco *));
     size_t edge_idx = 0;
 
     for (size_t i = 0; i < graph->gHash_length; i++)
@@ -152,9 +146,7 @@ bool *bfs(const grafo *graph, int start, bool only_msf)
     assert(graph->vicini != NULL);
     assert(start >= 0 && start < graph->node_count);
 
-    bool *nodes = calloc(graph->node_count, sizeof(bool));
-    if (nodes == NULL)
-        xtermina("Memory allocation failed", __LINE__, __FILE__);
+    bool *nodes = checked_calloc(graph->node_count, sizeof(bool));
 
     circular_buffer queue;
     circular_buffer_init(&queue, graph->node_count, sizeof(int));
