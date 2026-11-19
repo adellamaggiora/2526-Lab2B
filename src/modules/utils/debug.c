@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "utils/debug.h"
 
+
 void debug_print_hash_table(arco **hash_table, int table_length)
 {
     for (int i = 0; i < table_length; i++)

@@ -37,8 +37,10 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (argc - optind != 2)
-        xtermina("Exactly two files are required: graph file and operations file", __LINE__, __FILE__);
+    if (argc - optind != 2) 
+    {
+        xtermina("Graph file and operations file are both required", __LINE__, __FILE__);
+    }
 
     char *filepath = argv[optind];
     char *operations_path = argv[optind + 1];
@@ -81,8 +83,11 @@ int main(int argc, char *argv[])
         enqueue_operation(&buffer, end);
     }
 
+
+
     for (int i = 0; i < threads; i++)
     {
+        // esce dal ciclo for solo quando tutti i thread sono TERMINATI
         // join è un punto di attesa per il thread main (produttore)
         // prosegue solo quando tutti i thread sono terminati
         xpthread_join(consumers[i], NULL, __LINE__, __FILE__);

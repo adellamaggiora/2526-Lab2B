@@ -5,9 +5,19 @@
     - Oggetto grande, condiviso, modificabile da più parti o allocato dinamicamente → ritorna un puntatore
     - Mai ritornare il puntatore a una variabile locale (una variabiel che "vive" solo all'interno di una funzione)
 
-- differenza tra `.` (punto) e `->` (freccia) 
-    - . quando hai la struct
-    - -> quando hai un puntatore alla struct
+- Accesso e assegnamento ai campi di una `struct`
+    - `operation.type` accede al campo `type` della struct `operation`, come `oggetto.proprieta` in JavaScript. In C i campi e i loro tipi sono fissati dalla definizione della struct.
+    - `operation.type == END_OPERATIONS` confronta il campo con la costante dell'enum; `operation.type = END_OPERATIONS;` assegna quel valore al campo.
+    - Si usa `.` con la struct e `->` con un puntatore alla struct: `ptr->type = END_OPERATIONS;`.
+    - Anche l'inizializzazione ricorda un object literal JavaScript: in C si chiama **inizializzazione designata** (`.campo = valore`).
+
+    ```c
+    graph_operation operation = {.type = END_OPERATIONS}; // inizializza la struct
+    operation.type = ADD_EDGE;                           // modifica solo type
+    operation = (graph_operation){.type = END_OPERATIONS}; // assegna l'intera struct
+    ```
+
+    Nell'ultima riga `(graph_operation){...}` è un **compound literal**. Negli esempi con `{.type = ...}`, gli altri campi interi (`u`, `v`, `weight`) vengono impostati a zero.
 
 - struttura dati `union`
     ```c

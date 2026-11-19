@@ -11,7 +11,7 @@ typedef enum graph_operation_type {
 } graph_operation_type;
 
 
-// operazione parsata e nel buffer
+// operazione parsata e inserita nel buffer
 typedef struct graph_operation {
     graph_operation_type type;
     int u;
