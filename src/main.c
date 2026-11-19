@@ -5,32 +5,17 @@
 #include "io/graph_parser.h"
 #include "io/operation_parser.h"
 #include "concurrency/bounded_buffer.h"
+#include "concurrency/consumer.h"
 #include "graph/graph.h"
 #include "graph/graph_operation.h"
 #include "utils/xerrori.h"
 #include "utils/debug.h"
 
 
-static void *consume_operations(void *arg)
-{
-    bounded_buffer *buffer = arg;
-    while (true)
-    {
-        graph_operation operation = dequeue_operation(buffer);
-        // quando non ci sono più operazioni ritorno NULL
-        if (operation.type == END_OPERATIONS)
-        {
-            return NULL;
-        }
-
-        // Per ora estraiamo soltanto l'operazione, senza eseguirla.
-    }
-}
-
 int main(int argc, char *argv[])
 {
 
-    // valori di default
+    // valori di default (specs.md)
     int threads = 3;
     int hashsize = 100000;
     int nmutex = 1000;
@@ -73,7 +58,7 @@ int main(int argc, char *argv[])
     bounded_buffer buffer;
     bounded_buffer_init(&buffer, 64);
 
-    // creazione dei consumatori
+    // creazione dei consumatori che stanno in attesa di estrarre dal buffer
     pthread_t *consumers = checked_malloc((size_t)threads * sizeof(*consumers));
     for (int i = 0; i < threads; i++)
     {
@@ -98,6 +83,8 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < threads; i++)
     {
+        // join è un punto di attesa per il thread main (produttore)
+        // prosegue solo quando tutti i thread sono terminati
         xpthread_join(consumers[i], NULL, __LINE__, __FILE__);
     }
 

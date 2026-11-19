@@ -227,7 +227,17 @@ e restituisce l'errore al sistema operativo
 
 - Nell'esempio, `END_OPERATIONS` è il messaggio estratto dalla coda che indica la fine del lavoro; `NULL` è invece il risultato restituito dal thread. Il main può recuperarne il valore con `pthread_join`; con `pthread_join(thread, NULL)` sceglie di non recuperarlo.
 
+## pthread_attr_t: attributi del thread
+
+- `pthread_attr_t` è il tipo che contiene le impostazioni con cui creare un thread, per esempio la dimensione dello stack e la modalità **joinable** oppure **detached**.
+- In `pthread_create`, `thread` è il puntatore dove viene scritto l'identificatore del nuovo thread (`pthread_t`); `attr` è invece il puntatore alle impostazioni da usare.
+- Passare `NULL` come secondo argomento usa le impostazioni predefinite. Il thread è **joinable**, quindi puoi aspettarne la terminazione con `pthread_join`: è la scelta usata nel progetto.
+- Per impostazioni personalizzate, dichiari `pthread_attr_t attr`, la inizializzi con `pthread_attr_init(&attr)`, la configuri tramite le funzioni `pthread_attr_set...` e passi `&attr`. La sola dichiarazione non basta: gli attributi vanno inizializzati.
+- Dopo la creazione puoi chiamare `pthread_attr_destroy(&attr)` per liberare le risorse degli attributi: questo non termina il thread. Un thread **detached** rilascia automaticamente le proprie risorse interne quando termina e non può essere aspettato con `pthread_join`.
+
 ## pthread_join e terminazione dei consumatori
+
+- `pthread_join` non uccide il thread e non gli invia segnali: aspetta soltanto che termini. Nel progetto il consumatore estrae `END_OPERATIONS` e termina con `return NULL;`; a quel punto la `join` può completarsi. `END_OPERATIONS` è un messaggio nella coda, non un segnale del sistema operativo.
 
 - `pthread_create` avvia un thread; `pthread_join` aspetta che quel thread termini. La `join` blocca soltanto il chiamante: nel progetto è il main ad aspettare, mentre gli altri consumatori possono continuare a lavorare. Se il thread è già terminato, l'attesa non serve e la chiamata può completarsi subito.
 
